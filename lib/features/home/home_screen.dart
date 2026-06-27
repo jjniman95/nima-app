@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import '../chat/chats_screen.dart';
+import '../hi_requests/hi_requests_screen.dart';
 import '../nearby/nearby_screen.dart';
-import '../notifications/notifications_screen.dart';
 import '../premium/premium_screen.dart';
 import '../settings/settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int index = 0;
+  int currentIndex = 0;
 
   final pages = const [
     NearbyScreen(),
+    HiRequestsScreen(),
     ChatsScreen(),
-    NotificationsScreen(),
     PremiumScreen(),
     SettingsScreen(),
   ];
@@ -26,16 +25,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[index],
+      body: pages[currentIndex],
       bottomNavigationBar: NavigationBar(
-        selectedIndex: index,
-        onDestinationSelected: (value) => setState(() => index = value),
+        selectedIndex: currentIndex,
+        onDestinationSelected: (value) => setState(() => currentIndex = value),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.radar), label: 'Nearby'),
-          NavigationDestination(icon: Icon(Icons.chat_bubble_outline), label: 'Chats'),
-          NavigationDestination(icon: Icon(Icons.notifications_none), label: 'Alerts'),
-          NavigationDestination(icon: Icon(Icons.workspace_premium), label: 'Premium'),
-          NavigationDestination(icon: Icon(Icons.settings_outlined), label: 'Settings'),
+          NavigationDestination(icon: Icon(Icons.radar_rounded), label: 'Nearby'),
+          NavigationDestination(icon: Icon(Icons.waving_hand_rounded), label: 'Hi'),
+          NavigationDestination(icon: Icon(Icons.chat_bubble_rounded), label: 'Chat'),
+          NavigationDestination(icon: Icon(Icons.workspace_premium_rounded), label: 'Premium'),
+          NavigationDestination(icon: Icon(Icons.settings_rounded), label: 'Settings'),
         ],
       ),
     );
