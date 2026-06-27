@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 ///
 /// All colors in the app must be referenced from here.
 /// Never use raw hex codes anywhere outside this file.
-abstract final class AppColors {
+class AppColors {
   // ── Brand ────────────────────────────────────────────────────────────────
   static const Color royalPurple = Color(0xFF6C4DFF);
   static const Color royalPurpleLight = Color(0xFF9B85FF);
