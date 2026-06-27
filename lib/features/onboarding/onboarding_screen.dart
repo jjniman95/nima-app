@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text.dart';
+import '../../core/widgets/nima_feature_card.dart';
+import '../../core/widgets/nima_gradient_logo.dart';
 import '../auth/login_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
@@ -15,112 +17,57 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    final items = [
-      ('Privacy First', 'You decide when you are visible.'),
-      ('Consent Always', 'Chats begin only after mutual acceptance.'),
-      ('Connect Nearby', 'Discover people around you respectfully.'),
-    ];
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(AppText.appName),
-      ),
+      appBar: AppBar(title: const Text(AppText.appName)),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(24, 18, 24, 24),
           child: Column(
             children: [
-              const SizedBox(height: 24),
-
-              const Text(
-                'Meet. Chat. Connect.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 34,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
+              const NimaGradientLogo(size: 110),
+              const SizedBox(height: 26),
+              Text(AppText.onboardingTitle,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 38,
+                    height: 1.1,
+                    fontWeight: FontWeight.w900,
+                    color: isDark ? Colors.white : AppColors.textDark,
+                  )),
               const SizedBox(height: 14),
-
-              Text(
-                'A safe and private way to connect with nearby people through mutual consent.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: isDark ? Colors.white70 : AppColors.textMuted,
-                ),
-              ),
-
+              Text(AppText.onboardingSubtitle,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    height: 1.45,
+                    color: isDark ? Colors.white70 : AppColors.textMuted,
+                  )),
               const SizedBox(height: 34),
-
-              for (final item in items)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 14),
-                  child: Container(
-                    padding: const EdgeInsets.all(18),
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF1E293B) : Colors.white,
-                      borderRadius: BorderRadius.circular(22),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
-                          blurRadius: 18,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 30,
-                          backgroundColor: AppColors.royalPurple,
-                          child: Icon(
-                            Icons.verified_user,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(width: 18),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item.$1,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: isDark ? Colors.white : Colors.black87,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                item.$2,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: isDark ? Colors.white70 : Colors.black54,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-              const SizedBox(height: 30),
-
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => _goLogin(context),
-                  child: const Text('Continue'),
-                ),
+              const NimaFeatureCard(
+                icon: Icons.privacy_tip_rounded,
+                title: AppText.privacyFirst,
+                subtitle: AppText.privacyFirstDesc,
               ),
-
-              const SizedBox(height: 20),
+              const NimaFeatureCard(
+                icon: Icons.verified_user_rounded,
+                title: AppText.consentAlways,
+                subtitle: AppText.consentAlwaysDesc,
+              ),
+              const NimaFeatureCard(
+                icon: Icons.radar_rounded,
+                title: AppText.connectNearby,
+                subtitle: AppText.connectNearbyDesc,
+              ),
+              const SizedBox(height: 26),
+              ElevatedButton(
+                onPressed: () => _goLogin(context),
+                child: const Text('Get Started'),
+              ),
+              const SizedBox(height: 12),
+              TextButton(
+                onPressed: () => _goLogin(context),
+                child: const Text('I already have an account'),
+              ),
             ],
           ),
         ),
