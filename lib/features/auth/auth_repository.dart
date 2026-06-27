@@ -45,7 +45,6 @@ class AuthRepository {
   }) async {
     await _auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
-      resendToken: resendToken,
       timeout: const Duration(seconds: 60),
 
       // ── Happy path: SMS delivered ────────────────────────────────────────
