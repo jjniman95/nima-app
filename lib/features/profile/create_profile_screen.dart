@@ -1,10 +1,27 @@
 import 'package:flutter/material.dart';
+import '../../core/constants/app_colors.dart';
 import '../home/home_screen.dart';
 
-class CreateProfileScreen extends StatelessWidget {
+class CreateProfileScreen extends StatefulWidget {
   const CreateProfileScreen({super.key});
+  @override
+  State<CreateProfileScreen> createState() => _CreateProfileScreenState();
+}
 
-  void _finish(BuildContext context) {
+class _CreateProfileScreenState extends State<CreateProfileScreen> {
+  final nicknameController = TextEditingController();
+  final bioController = TextEditingController();
+  final interests = ['Coffee', 'Travel', 'Music', 'Movies', 'Books', 'Fitness'];
+  final selected = <String>{};
+
+  @override
+  void dispose() {
+    nicknameController.dispose();
+    bioController.dispose();
+    super.dispose();
+  }
+
+  void _finish() {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => const HomeScreen()),
     );
@@ -12,44 +29,55 @@ class CreateProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final interests = ['Travel', 'Music', 'Coffee', 'Movies', 'Books', 'Fitness'];
-
     return Scaffold(
       appBar: AppBar(title: const Text('Create Profile')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            const CircleAvatar(
-              radius: 46,
-              child: Icon(Icons.person, size: 54),
-            ),
-            const SizedBox(height: 24),
-            const TextField(decoration: InputDecoration(labelText: 'Nickname')),
-            const SizedBox(height: 14),
-            const TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Age'),
-            ),
-            const SizedBox(height: 14),
-            const TextField(decoration: InputDecoration(labelText: 'Bio')),
-            const SizedBox(height: 24),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text('Interests', style: Theme.of(context).textTheme.titleMedium),
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 10,
-              runSpacing: 8,
-              children: interests.map((e) => Chip(label: Text(e))).toList(),
-            ),
-            const SizedBox(height: 34),
-            ElevatedButton(
-              onPressed: () => _finish(context),
-              child: const Text('Complete Profile'),
-            ),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              const CircleAvatar(
+                radius: 48,
+                backgroundColor: AppColors.royalPurple,
+                child: Icon(Icons.person_rounded, color: Colors.white, size: 56),
+              ),
+              const SizedBox(height: 24),
+              TextField(
+                controller: nicknameController,
+                decoration: const InputDecoration(labelText: 'Nickname'),
+              ),
+              const SizedBox(height: 14),
+              TextField(
+                controller: bioController,
+                decoration: const InputDecoration(labelText: 'Short bio'),
+              ),
+              const SizedBox(height: 24),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Interests',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 10,
+                runSpacing: 8,
+                children: interests.map((interest) {
+                  final active = selected.contains(interest);
+                  return FilterChip(
+                    selected: active,
+                    label: Text(interest),
+                    onSelected: (_) {
+                      setState(() {
+                        active ? selected.remove(interest) : selected.add(interest);
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 34),
+              ElevatedButton(onPressed: _finish, child: const Text('Complete Profile')),
+            ],
+          ),
         ),
       ),
     );
