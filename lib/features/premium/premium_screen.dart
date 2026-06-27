@@ -9,45 +9,35 @@ class PremiumScreen extends StatelessWidget {
     final benefits = [
       'Unlimited chat time',
       'Unlimited messages',
-      'Two-way reconnects',
-      'Extra profile customization',
-      'Voice messages in future',
+      'Reconnect with mutual consent',
+      'More privacy controls',
     ];
 
     return Scaffold(
-      backgroundColor: AppColors.darkBackground,
-      appBar: AppBar(
-        title: const Text('NIMA Premium'),
-        foregroundColor: Colors.white,
-      ),
-      body: Padding(
+      appBar: AppBar(title: const Text('NIMA Premium')),
+      body: ListView(
         padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            const Icon(Icons.workspace_premium, size: 80, color: Colors.amber),
-            const SizedBox(height: 20),
-            const Text(
-              'NIMA Premium',
-              style: TextStyle(fontSize: 32, color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Continue meaningful conversations without limits.',
+        children: [
+          const Icon(Icons.workspace_premium_rounded, size: 84, color: AppColors.amber),
+          const SizedBox(height: 20),
+          const Text('Upgrade your connections',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white70),
-            ),
-            const SizedBox(height: 26),
-            ...benefits.map((b) => ListTile(
-                  leading: const Icon(Icons.check_circle, color: AppColors.emerald),
-                  title: Text(b, style: const TextStyle(color: Colors.white)),
-                )),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Upgrade Later'),
-            ),
-          ],
-        ),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900)),
+          const SizedBox(height: 14),
+          const Text(
+            'Premium features will be connected after the free chat system is complete.',
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 28),
+          ...benefits.map((benefit) => Card(
+                child: ListTile(
+                  leading: const Icon(Icons.check_circle_rounded, color: AppColors.emerald),
+                  title: Text(benefit),
+                ),
+              )),
+          const SizedBox(height: 20),
+          ElevatedButton(onPressed: () {}, child: const Text('Coming Soon')),
+        ],
       ),
     );
   }
