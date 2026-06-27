@@ -6,13 +6,12 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      ('Edit Profile', Icons.person_outline),
-      ('Privacy', Icons.lock_outline),
-      ('Blocked Users', Icons.block),
-      ('Report a Problem', Icons.report_outlined),
-      ('Notifications', Icons.notifications_none),
-      ('About NIMA', Icons.info_outline),
-      ('Logout', Icons.logout),
+      ('Edit Profile', Icons.person_rounded),
+      ('Privacy', Icons.lock_rounded),
+      ('Blocked Users', Icons.block_rounded),
+      ('Report a Problem', Icons.report_rounded),
+      ('About NIMA', Icons.info_rounded),
+      ('Logout', Icons.logout_rounded),
     ];
 
     return Scaffold(
@@ -27,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
             child: ListTile(
               leading: Icon(item.$2),
               title: Text(item.$1),
-              trailing: const Icon(Icons.chevron_right),
+              trailing: const Icon(Icons.chevron_right_rounded),
               onTap: () {},
             ),
           );
