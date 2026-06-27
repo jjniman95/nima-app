@@ -10,14 +10,25 @@ abstract final class AppText {
   }
 
   // ── Auth ─────────────────────────────────────────────────────────────────
-  static const String welcomeBack = 'Welcome to NIMA';
-  static const String enterPhone = 'Enter your phone number to get started.';
-  static const String phonePlaceholder = '+94 7X XXX XXXX';
+  static const String loginTitle = 'Welcome to NIMA';
+  static const String loginSubtitle = 'Enter your phone number to continue.';
+  static const String phoneHint = '+94 7X XXX XXXX';
   static const String sendOtp = 'Send OTP';
   static const String verifyOtp = 'Verify Code';
   static const String enterOtp = 'Enter the 6-digit code sent to';
   static const String resendOtp = 'Resend code';
   static const String otpSent = 'OTP sent successfully!';
+  static const String verifyOtp = 'Verify';
+  static const String privacyFirst = 'Privacy First';
+  static const String privacyFirstDesc = 'You decide when you are visible.';
+  static const String consentAlways = 'Consent Always';
+  static const String consentAlwaysDesc =
+      'Chats begin only after mutual acceptance.';
+
+  static const String connectNearby = 'Connect Nearby';
+  static const String connectNearbyDesc =
+      'Discover people around you respectfully.';
+}
 
   // ── Errors ───────────────────────────────────────────────────────────────
   static const String invalidPhone = 'Please enter a valid phone number.';
