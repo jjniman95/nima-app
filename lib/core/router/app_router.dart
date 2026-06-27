@@ -5,12 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../features/auth/auth_repository.dart';
-import '../features/auth/auth_notifier.dart';
-import '../features/auth/auth_state.dart';
+import '../../features/auth/auth_repository.dart';
+import '../../features/auth/auth_notifier.dart';
+import '../../features/auth/auth_state.dart';
+import '../../features/splash/splash_screen.dart';
 import '../../features/auth/login_screen.dart';
 import '../../features/auth/otp_screen.dart';
-import '../features/splash/splash_screen.dart';
 // TODO Phase 2+: import remaining screens
 // import '../features/profile/create_profile_screen.dart';
 // import '../features/home/home_screen.dart';
