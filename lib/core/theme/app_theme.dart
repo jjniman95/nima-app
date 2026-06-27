@@ -1,71 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../constants/app_colors.dart';
 
 class AppTheme {
-  static ThemeData get lightTheme {
-    final base = ThemeData(
-      useMaterial3: true,
-      colorSchemeSeed: AppColors.royalPurple,
-      brightness: Brightness.light,
-      scaffoldBackgroundColor: AppColors.lightBackground,
-    );
+  static ThemeData get lightTheme => ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.light,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.royalPurple,
+          brightness: Brightness.light,
+        ),
+        scaffoldBackgroundColor: AppColors.lightBackground,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.lightBackground,
+          foregroundColor: AppColors.textDark,
+          elevation: 0,
+        ),
+        cardTheme: CardThemeData(
+          color: AppColors.lightSurface,
+          elevation: 0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.royalPurple,
+            foregroundColor: Colors.white,
+            minimumSize: const Size.fromHeight(54),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          ),
+        ),
+      );
 
-    return base.copyWith(
-      textTheme: GoogleFonts.interTextTheme(base.textTheme),
-      appBarTheme: const AppBarTheme(
-        centerTitle: false,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.royalPurple,
+  static ThemeData get darkTheme => ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.dark,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.royalPurple,
+          brightness: Brightness.dark,
+        ),
+        scaffoldBackgroundColor: AppColors.darkBackground,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.darkBackground,
           foregroundColor: Colors.white,
-          minimumSize: const Size.fromHeight(54),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
-          textStyle: GoogleFonts.poppins(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          elevation: 0,
         ),
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
-          borderSide: BorderSide.none,
+        cardTheme: CardThemeData(
+          color: AppColors.darkSurface,
+          elevation: 0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         ),
-      ),
-    );
-  }
-
-  static ThemeData get darkTheme {
-    final base = ThemeData(
-      useMaterial3: true,
-      colorSchemeSeed: AppColors.royalPurple,
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: AppColors.darkBackground,
-    );
-
-    return base.copyWith(
-      textTheme: GoogleFonts.interTextTheme(base.textTheme).apply(
-        bodyColor: Colors.white,
-        displayColor: Colors.white,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.royalPurple,
-          foregroundColor: Colors.white,
-          minimumSize: const Size.fromHeight(54),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.royalPurple,
+            foregroundColor: Colors.white,
+            minimumSize: const Size.fromHeight(54),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           ),
         ),
-      ),
-    );
-  }
+      );
 }
