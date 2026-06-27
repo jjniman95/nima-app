@@ -4,7 +4,10 @@
 abstract final class AppText {
   // ── Brand ────────────────────────────────────────────────────────────────
   static const String appName = 'NIMA';
+  static const String meaning = 'Nearby Instant Meet App';
   static const String tagline = 'Meet safely, connect silently.';
+  static const String slogan = 'Connecting people with consent.';
+  }
 
   // ── Auth ─────────────────────────────────────────────────────────────────
   static const String welcomeBack = 'Welcome to NIMA';
