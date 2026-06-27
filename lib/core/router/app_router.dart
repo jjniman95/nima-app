@@ -36,10 +36,7 @@ abstract final class AppRoutes {
 /// auth state changes automatically using [refreshListenable].
 @riverpod
 GoRouter appRouter(Ref ref) {
-  // Watch auth state — GoRouter will call its redirect logic whenever this
-  // stream emits a new value (login, logout, token refresh).
-  final authState = ref.watch(authStateChangesProvider);
-
+  
   return GoRouter(
     initialLocation: AppRoutes.splash,
     debugLogDiagnostics: true, // Set to false for production builds
