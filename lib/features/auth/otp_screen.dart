@@ -21,7 +21,7 @@ import 'auth_state.dart';
 ///   - Resend OTP with 60s countdown timer
 ///   - Loading state while verifying
 ///   - Navigates to CreateProfile (new user) or Home (existing user)
-class OtpScreen extends StatelessWidget {
+class OtpScreen extends ConsumerStatefulWidget {
   const OtpScreen({
     super.key,
     required this.phoneNumber,
