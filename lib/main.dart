@@ -13,12 +13,13 @@ class NimaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'NIMA',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      home: const SplashScreen(),
+  title: 'NIMA',
+  debugShowCheckedModeBanner: false,
+  theme: AppTheme.lightTheme,
+  darkTheme: AppTheme.darkTheme,
+  themeMode: ThemeMode.system,
+  themeAnimationDuration: Duration.zero,
+  home: const SplashScreen(),
     );
   }
 }
