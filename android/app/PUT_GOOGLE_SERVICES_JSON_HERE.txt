@@ -1,2 +1,0 @@
-Upload your real Firebase google-services.json into this folder as android/app/google-services.json
-Firebase package name must be com.nima.nearby
