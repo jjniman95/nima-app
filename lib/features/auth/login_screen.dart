@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+
 import '../../core/constants/app_colors.dart';
-import '../profile/create_profile_screen.dart';
+import '../../services/auth_service.dart';
+import 'otp_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final phoneController = TextEditingController(text: '+94 ');
+  final phoneController = TextEditingController(text: '+94');
+  final authService = AuthService();
+
+  bool loading = false;
 
   @override
   void dispose() {
@@ -17,15 +23,51 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _continueDemo() {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const CreateProfileScreen()),
+  Future<void> _sendOtp() async {
+    final phone = phoneController.text.trim();
+
+    if (phone.length < 10) {
+      _showError('Enter a valid phone number.');
+      return;
+    }
+
+    setState(() => loading = true);
+
+    await authService.sendOtp(
+      phoneNumber: phone,
+      onCodeSent: (verificationId) {
+        if (!mounted) return;
+        setState(() => loading = false);
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => OtpScreen(
+              phoneNumber: phone,
+              verificationId: verificationId,
+            ),
+          ),
+        );
+      },
+      onError: (message) {
+        if (!mounted) return;
+        setState(() => loading = false);
+        _showError(message);
+      },
+    );
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: AppColors.red,
+        content: Text(message),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Phone Login')),
       body: SafeArea(
@@ -34,15 +76,17 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Welcome to NIMA',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w900,
-                    color: isDark ? Colors.white : AppColors.textDark,
-                  )),
+              Text(
+                'Welcome to NIMA',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w900,
+                  color: isDark ? Colors.white : AppColors.textDark,
+                ),
+              ),
               const SizedBox(height: 10),
               Text(
-                'Enter your phone number to continue. Firebase OTP will be connected in the next phase.',
+                'Enter your phone number to receive an OTP.',
                 style: TextStyle(
                   fontSize: 16,
                   height: 1.45,
@@ -55,21 +99,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 keyboardType: TextInputType.phone,
                 decoration: const InputDecoration(
                   labelText: 'Phone number',
+                  hintText: '+947XXXXXXXX',
                   prefixIcon: Icon(Icons.phone_rounded),
                 ),
               ),
               const SizedBox(height: 22),
               ElevatedButton(
-                onPressed: _continueDemo,
-                child: const Text('Continue Demo'),
-              ),
-              const SizedBox(height: 14),
-              Text(
-                'This clean build does not include Firebase yet. First we confirm the app is stable.',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: isDark ? Colors.white54 : AppColors.textMuted,
-                ),
+                onPressed: loading ? null : _sendOtp,
+                child: loading
+                    ? const SizedBox(
+                        height: 22,
+                        width: 22,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Send OTP'),
               ),
             ],
           ),
