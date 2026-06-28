@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+
 import '../chat/chats_screen.dart';
 import '../hi_requests/hi_requests_screen.dart';
 import '../nearby/nearby_screen.dart';
-import '../premium/premium_screen.dart';
+import '../notifications/notifications_screen.dart';
 import '../settings/settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -18,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     NearbyScreen(),
     HiRequestsScreen(),
     ChatsScreen(),
-    PremiumScreen(),
+    NotificationsScreen(),
     SettingsScreen(),
   ];
 
@@ -33,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
           NavigationDestination(icon: Icon(Icons.radar_rounded), label: 'Nearby'),
           NavigationDestination(icon: Icon(Icons.waving_hand_rounded), label: 'Hi'),
           NavigationDestination(icon: Icon(Icons.chat_bubble_rounded), label: 'Chat'),
-          NavigationDestination(icon: Icon(Icons.workspace_premium_rounded), label: 'Premium'),
+          NavigationDestination(icon: Icon(Icons.notifications_rounded), label: 'Alerts'),
           NavigationDestination(icon: Icon(Icons.settings_rounded), label: 'Settings'),
         ],
       ),
