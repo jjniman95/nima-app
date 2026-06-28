@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1014963830845",
+    "project_id": "nima-ff7e6",
+    "storage_bucket": "nima-ff7e6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1014963830845:android:663c3970ef5f8cbe4c2a54",
+        "android_client_info": {
+          "package_name": "com.nima.nearby"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAodbL2h0KJHIESbUd_-s-K8gI_NZg4bO8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
