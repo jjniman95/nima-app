@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text.dart';
 import '../../core/widgets/nima_feature_card.dart';
@@ -17,6 +18,7 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(title: const Text(AppText.appName)),
       body: SafeArea(
@@ -26,22 +28,26 @@ class OnboardingScreen extends StatelessWidget {
             children: [
               const NimaGradientLogo(size: 110),
               const SizedBox(height: 26),
-              Text(AppText.onboardingTitle,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 38,
-                    height: 1.1,
-                    fontWeight: FontWeight.w900,
-                    color: isDark ? Colors.white : AppColors.textDark,
-                  )),
+              Text(
+                AppText.onboardingTitle,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 38,
+                  height: 1.1,
+                  fontWeight: FontWeight.w900,
+                  color: isDark ? Colors.white : AppColors.textDark,
+                ),
+              ),
               const SizedBox(height: 14),
-              Text(AppText.onboardingSubtitle,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    height: 1.45,
-                    color: isDark ? Colors.white70 : AppColors.textMuted,
-                  )),
+              Text(
+                AppText.onboardingSubtitle,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  height: 1.45,
+                  color: isDark ? Colors.white70 : AppColors.textMuted,
+                ),
+              ),
               const SizedBox(height: 34),
               const NimaFeatureCard(
                 icon: Icons.privacy_tip_rounded,
@@ -62,11 +68,6 @@ class OnboardingScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () => _goLogin(context),
                 child: const Text('Get Started'),
-              ),
-              const SizedBox(height: 12),
-              TextButton(
-                onPressed: () => _goLogin(context),
-                child: const Text('I already have an account'),
               ),
             ],
           ),
