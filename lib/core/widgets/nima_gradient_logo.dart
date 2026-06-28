@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import '../constants/app_colors.dart';
 
 class NimaGradientLogo extends StatelessWidget {
   const NimaGradientLogo({super.key, this.size = 120});
+
   final double size;
 
   @override

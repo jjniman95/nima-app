@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../constants/app_colors.dart';
 
 class NimaFeatureCard extends StatelessWidget {
@@ -16,6 +17,7 @@ class NimaFeatureCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
@@ -44,19 +46,23 @@ class NimaFeatureCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: isDark ? Colors.white : AppColors.textDark,
-                    )),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: isDark ? Colors.white : AppColors.textDark,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                Text(subtitle,
-                    style: TextStyle(
-                      fontSize: 15,
-                      height: 1.3,
-                      color: isDark ? Colors.white70 : AppColors.textMuted,
-                    )),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 15,
+                    height: 1.3,
+                    color: isDark ? Colors.white70 : AppColors.textMuted,
+                  ),
+                ),
               ],
             ),
           ),
