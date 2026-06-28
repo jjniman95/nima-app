@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import '../../core/constants/app_colors.dart';
 import '../home/home_screen.dart';
 
 class CreateProfileScreen extends StatefulWidget {
   const CreateProfileScreen({super.key});
+
   @override
   State<CreateProfileScreen> createState() => _CreateProfileScreenState();
 }
@@ -14,6 +18,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   final interests = ['Coffee', 'Travel', 'Music', 'Movies', 'Books', 'Fitness'];
   final selected = <String>{};
 
+  bool saving = false;
+
   @override
   void dispose() {
     nicknameController.dispose();
@@ -21,7 +27,32 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     super.dispose();
   }
 
-  void _finish() {
+  Future<void> _saveProfile() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    if (nicknameController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a nickname.')),
+      );
+      return;
+    }
+
+    setState(() => saving = true);
+
+    await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+      'uid': user.uid,
+      'phone': user.phoneNumber,
+      'nickname': nicknameController.text.trim(),
+      'bio': bioController.text.trim(),
+      'interests': selected.toList(),
+      'visibility': false,
+      'isOnline': true,
+      'lastSeen': FieldValue.serverTimestamp(),
+      'createdAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+
+    if (!mounted) return;
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => const HomeScreen()),
     );
@@ -30,7 +61,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Profile')),
+      appBar: AppBar(
+        title: const Text('Create Profile'),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -54,8 +87,10 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
               const SizedBox(height: 24),
               const Align(
                 alignment: Alignment.centerLeft,
-                child: Text('Interests',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                child: Text(
+                  'Interests',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                ),
               ),
               const SizedBox(height: 12),
               Wrap(
@@ -68,14 +103,21 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                     label: Text(interest),
                     onSelected: (_) {
                       setState(() {
-                        active ? selected.remove(interest) : selected.add(interest);
+                        active
+                            ? selected.remove(interest)
+                            : selected.add(interest);
                       });
                     },
                   );
                 }).toList(),
               ),
               const SizedBox(height: 34),
-              ElevatedButton(onPressed: _finish, child: const Text('Complete Profile')),
+              ElevatedButton(
+                onPressed: saving ? null : _saveProfile,
+                child: saving
+                    ? const CircularProgressIndicator()
+                    : const Text('Complete Profile'),
+              ),
             ],
           ),
         ),
