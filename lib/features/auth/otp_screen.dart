@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../core/constants/app_colors.dart';
-import '../../services/auth_service.dart';
 import '../profile/create_profile_screen.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -20,9 +19,6 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   final otpController = TextEditingController();
-  final authService = AuthService();
-
-  bool loading = false;
 
   @override
   void dispose() {
@@ -30,31 +26,17 @@ class _OtpScreenState extends State<OtpScreen> {
     super.dispose();
   }
 
-  Future<void> _verifyOtp() async {
+  void _verifyOtp() {
     final code = otpController.text.trim();
 
     if (code.length != 6) {
-      _showError('Enter the 6-digit OTP.');
+      _showError('Enter any 6-digit code.');
       return;
     }
 
-    setState(() => loading = true);
-
-    try {
-      await authService.verifyOtp(
-        verificationId: widget.verificationId,
-        smsCode: code,
-      );
-
-      if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const CreateProfileScreen()),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      setState(() => loading = false);
-      _showError('Invalid OTP. Please try again.');
-    }
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const CreateProfileScreen()),
+    );
   }
 
   void _showError(String message) {
@@ -78,13 +60,13 @@ class _OtpScreenState extends State<OtpScreen> {
           child: Column(
             children: [
               const Text(
-                'Enter verification code',
+                'Development Verification',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900),
               ),
               const SizedBox(height: 10),
               Text(
-                'Code sent to ${widget.phoneNumber}',
+                'OTP SMS is skipped for now.\nEnter any 6-digit code for ${widget.phoneNumber}',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 28),
@@ -100,14 +82,8 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: loading ? null : _verifyOtp,
-                child: loading
-                    ? const SizedBox(
-                        height: 22,
-                        width: 22,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Text('Verify'),
+                onPressed: _verifyOtp,
+                child: const Text('Continue'),
               ),
             ],
           ),
