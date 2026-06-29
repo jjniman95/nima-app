@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../core/constants/app_colors.dart';
-import '../../services/auth_service.dart';
 import 'otp_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,9 +12,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final phoneController = TextEditingController(text: '+94');
-  final authService = AuthService();
-
-  bool loading = false;
 
   @override
   void dispose() {
@@ -24,27 +20,20 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _sendOtp() async {
-  final phone = phoneController.text.trim();
+    final phone = phoneController.text.trim();
 
-  if (phone.length < 10) {
-    _showError('Enter a valid phone number.');
-    return;
-  }
+    if (phone.length < 10) {
+      _showError('Enter a valid phone number.');
+      return;
+    }
 
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (_) => OtpScreen(
-        phoneNumber: phone,
-        verificationId: "debug",
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => OtpScreen(
+          phoneNumber: phone,
+          verificationId: 'debug',
+        ),
       ),
-    ),
-  );
-}
-      onError: (message) {
-        if (!mounted) return;
-        setState(() => loading = false);
-        _showError(message);
-      },
     );
   }
 
@@ -79,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 10),
               Text(
-                'Enter your phone number to receive an OTP.',
+                'Enter your phone number to continue.',
                 style: TextStyle(
                   fontSize: 16,
                   height: 1.45,
@@ -98,14 +87,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 22),
               ElevatedButton(
-                onPressed: loading ? null : _sendOtp,
-                child: loading
-                    ? const SizedBox(
-                        height: 22,
-                        width: 22,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Text('Send OTP'),
+                onPressed: _sendOtp,
+                child: const Text('Continue'),
               ),
             ],
           ),
