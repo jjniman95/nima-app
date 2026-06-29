@@ -24,29 +24,22 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _sendOtp() async {
-    final phone = phoneController.text.trim();
+  final phone = phoneController.text.trim();
 
-    if (phone.length < 10) {
-      _showError('Enter a valid phone number.');
-      return;
-    }
+  if (phone.length < 10) {
+    _showError('Enter a valid phone number.');
+    return;
+  }
 
-    setState(() => loading = true);
-
-    await authService.sendOtp(
-      phoneNumber: phone,
-      onCodeSent: (verificationId) {
-        if (!mounted) return;
-        setState(() => loading = false);
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => OtpScreen(
-              phoneNumber: phone,
-              verificationId: verificationId,
-            ),
-          ),
-        );
-      },
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) => OtpScreen(
+        phoneNumber: phone,
+        verificationId: "debug",
+      ),
+    ),
+  );
+}
       onError: (message) {
         if (!mounted) return;
         setState(() => loading = false);
