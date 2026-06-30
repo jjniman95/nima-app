@@ -57,6 +57,10 @@ class _NearbyScreenState extends State<NearbyScreen> {
       builder: (_) {
         return SafeArea(
   child: SingleChildScrollView(
+    child: ConstrainedBox(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.8,
+      ),
     child: Padding(
             padding: const EdgeInsets.fromLTRB(24, 18, 24, 24),
             child: Column(
@@ -168,7 +172,6 @@ class _NearbyScreenState extends State<NearbyScreen> {
               ],
             ),
           ),
-         ),
         );
       },
     );
