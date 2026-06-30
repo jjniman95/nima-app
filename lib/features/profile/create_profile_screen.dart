@@ -28,35 +28,19 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   }
 
   Future<void> _saveProfile() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return;
-
-    if (nicknameController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a nickname.')),
-      );
-      return;
-    }
-
-    setState(() => saving = true);
-
-    await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-      'uid': user.uid,
-      'phone': user.phoneNumber,
-      'nickname': nicknameController.text.trim(),
-      'bio': bioController.text.trim(),
-      'interests': selected.toList(),
-      'visibility': false,
-      'isOnline': true,
-      'lastSeen': FieldValue.serverTimestamp(),
-      'createdAt': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
-
-    if (!mounted) return;
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
+  if (nicknameController.text.trim().isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please enter a nickname.')),
     );
+    return;
   }
+
+  Navigator.of(context).pushReplacement(
+    MaterialPageRoute(
+      builder: (_) => const HomeScreen(),
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
