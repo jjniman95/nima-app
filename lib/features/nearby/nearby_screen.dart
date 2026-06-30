@@ -48,259 +48,136 @@ class _NearbyScreenState extends State<NearbyScreen> {
     required String proximity,
   }) {
     showModalBottomSheet(
-  isScrollControlled: true,
       context: context,
+      isScrollControlled: true,
       backgroundColor: AppColors.darkSurface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       builder: (_) {
         return SafeArea(
-  child: SingleChildScrollView(
-    child: ConstrainedBox(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.8,
-      ),
-    child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 18, 24, 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 46,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: Colors.white24,
-                    borderRadius: BorderRadius.circular(20),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 18, 24, 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 46,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: Colors.white24,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 44,
-                      backgroundColor: AppColors.royalPurple,
-                      child: Text(
-                        nickname.isNotEmpty ? nickname[0].toUpperCase() : 'N',
-                        style: const TextStyle(
-                          fontSize: 34,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      right: 4,
-                      bottom: 4,
-                      child: Container(
-                        width: 17,
-                        height: 17,
-                        decoration: BoxDecoration(
-                          color: dotColor,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.darkSurface, width: 3),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  nickname,
-                  style: const TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 9,
-                      height: 9,
-                      decoration: BoxDecoration(
-                        color: dotColor,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      proximity,
-                      style: const TextStyle(color: Colors.white70),
-                    ),
-                  ],
-                ),
-                if (bio.isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  Text(
-                    bio,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white60),
-                  ),
-                ],
-                const SizedBox(height: 22),
-                _ActionTile(
-                  icon: Icons.waving_hand_rounded,
-                  title: 'Say Hi',
-                  subtitle: 'Send a hi request',
-                  color: AppColors.royalPurple,
-                  onTap: () => Navigator.pop(context),
-                ),
-                _ActionTile(
-                  icon: Icons.chat_bubble_rounded,
-                  title: 'Chat',
-                  subtitle: 'Available after Hi is accepted',
-                  color: Colors.blueGrey,
-                  onTap: () => Navigator.pop(context),
-                ),
-                _ActionTile(
-                  icon: Icons.visibility_off_rounded,
-                  title: 'Hide User',
-                  subtitle: 'Hide from your radar',
-                  color: Colors.orange,
-                  onTap: () => Navigator.pop(context),
-                ),
-                _ActionTile(
-                  icon: Icons.block_rounded,
-                  title: 'Block User',
-                  subtitle: 'Block future interaction',
-void _showUserActions({
-  required String nickname,
-  required String bio,
-  required Color dotColor,
-  required String proximity,
-}) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: AppColors.darkSurface,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-    ),
-    builder: (_) {
-      return SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 18, 24, 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 46,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: Colors.white24,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 44,
-                      backgroundColor: AppColors.royalPurple,
-                      child: Text(
-                        nickname.isNotEmpty ? nickname[0].toUpperCase() : 'N',
-                        style: const TextStyle(
-                          fontSize: 34,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      right: 4,
-                      bottom: 4,
-                      child: Container(
-                        width: 17,
-                        height: 17,
-                        decoration: BoxDecoration(
-                          color: dotColor,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.darkSurface,
-                            width: 3,
+                  const SizedBox(height: 20),
+                  Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 44,
+                        backgroundColor: AppColors.royalPurple,
+                        child: Text(
+                          nickname.isNotEmpty
+                              ? nickname[0].toUpperCase()
+                              : 'N',
+                          style: const TextStyle(
+                            fontSize: 34,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  nickname,
-                  style: const TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 9,
-                      height: 9,
-                      decoration: BoxDecoration(
-                        color: dotColor,
-                        shape: BoxShape.circle,
+                      Positioned(
+                        right: 4,
+                        bottom: 4,
+                        child: Container(
+                          width: 17,
+                          height: 17,
+                          decoration: BoxDecoration(
+                            color: dotColor,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.darkSurface,
+                              width: 3,
+                            ),
+                          ),
+                        ),
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    nickname,
+                    style: const TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
                     ),
-                    const SizedBox(width: 8),
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 9,
+                        height: 9,
+                        decoration: BoxDecoration(
+                          color: dotColor,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        proximity,
+                        style: const TextStyle(color: Colors.white70),
+                      ),
+                    ],
+                  ),
+                  if (bio.isNotEmpty) ...[
+                    const SizedBox(height: 10),
                     Text(
-                      proximity,
-                      style: const TextStyle(color: Colors.white70),
+                      bio,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white60),
                     ),
                   ],
-                ),
-                if (bio.isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  Text(
-                    bio,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white60),
+                  const SizedBox(height: 22),
+                  _ActionTile(
+                    icon: Icons.waving_hand_rounded,
+                    title: 'Say Hi',
+                    subtitle: 'Send a hi request',
+                    color: AppColors.royalPurple,
+                    onTap: () => Navigator.pop(context),
+                  ),
+                  _ActionTile(
+                    icon: Icons.chat_bubble_rounded,
+                    title: 'Chat',
+                    subtitle: 'Available after Hi is accepted',
+                    color: Colors.blueGrey,
+                    onTap: () => Navigator.pop(context),
+                  ),
+                  _ActionTile(
+                    icon: Icons.visibility_off_rounded,
+                    title: 'Hide User',
+                    subtitle: 'Hide from your radar',
+                    color: Colors.orange,
+                    onTap: () => Navigator.pop(context),
+                  ),
+                  _ActionTile(
+                    icon: Icons.block_rounded,
+                    title: 'Block User',
+                    subtitle: 'Block future interaction',
+                    color: Colors.red,
+                    onTap: () => Navigator.pop(context),
                   ),
                 ],
-                const SizedBox(height: 22),
-                _ActionTile(
-                  icon: Icons.waving_hand_rounded,
-                  title: 'Say Hi',
-                  subtitle: 'Send a hi request',
-                  color: AppColors.royalPurple,
-                  onTap: () => Navigator.pop(context),
-                ),
-                _ActionTile(
-                  icon: Icons.chat_bubble_rounded,
-                  title: 'Chat',
-                  subtitle: 'Available after Hi is accepted',
-                  color: Colors.blueGrey,
-                  onTap: () => Navigator.pop(context),
-                ),
-                _ActionTile(
-                  icon: Icons.visibility_off_rounded,
-                  title: 'Hide User',
-                  subtitle: 'Hide from your radar',
-                  color: Colors.orange,
-                  onTap: () => Navigator.pop(context),
-                ),
-                _ActionTile(
-                  icon: Icons.block_rounded,
-                  title: 'Block User',
-                  subtitle: 'Block future interaction',
-                  color: Colors.red,
-                  onTap: () => Navigator.pop(context),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -331,6 +208,7 @@ void _showUserActions({
             builder: (context, constraints) {
               final width = constraints.maxWidth;
               final radarSize = math.min(width - 32, 430.0);
+              final visibleCount = math.min(users.length, 10);
 
               return SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
@@ -343,16 +221,22 @@ void _showUserActions({
                         alignment: Alignment.center,
                         children: [
                           _RadarBackground(size: radarSize),
-                          _CenterMarker(),
-                          ...List.generate(users.length.clamp(0, 10), (index) {
+                          const _CenterMarker(),
+                          ...List.generate(visibleCount, (index) {
                             final data = users[index].data();
-                            final nickname = (data['nickname'] ?? 'NIMA User').toString();
+                            final nickname =
+                                (data['nickname'] ?? 'NIMA User').toString();
                             final bio = (data['bio'] ?? '').toString();
 
-                            final angle = (2 * math.pi / users.length) * index - math.pi / 2;
-                            final radius = radarSize * (0.28 + (index % 3) * 0.12);
+                            final angle =
+                                (2 * math.pi / visibleCount) * index -
+                                    math.pi / 2;
+                            final radius =
+                                radarSize * (0.28 + (index % 3) * 0.12);
+
                             final x = math.cos(angle) * radius;
                             final y = math.sin(angle) * radius;
+
                             final active = selectedIndex == index;
                             final dotColor = _dotColor(index);
                             final proximity = _proximityText(index);
@@ -425,21 +309,30 @@ class _RadarPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
-    final paint = Paint()
+
+    final ringPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.2
       ..color = AppColors.royalPurple.withOpacity(0.45);
 
     for (int i = 1; i <= 4; i++) {
-      canvas.drawCircle(center, size.width * i / 9, paint);
+      canvas.drawCircle(center, size.width * i / 9, ringPaint);
     }
 
     final linePaint = Paint()
       ..strokeWidth = 1
       ..color = Colors.white.withOpacity(0.05);
 
-    canvas.drawLine(Offset(center.dx, 0), Offset(center.dx, size.height), linePaint);
-    canvas.drawLine(Offset(0, center.dy), Offset(size.width, center.dy), linePaint);
+    canvas.drawLine(
+      Offset(center.dx, 0),
+      Offset(center.dx, size.height),
+      linePaint,
+    );
+    canvas.drawLine(
+      Offset(0, center.dy),
+      Offset(size.width, center.dy),
+      linePaint,
+    );
   }
 
   @override
@@ -447,6 +340,8 @@ class _RadarPainter extends CustomPainter {
 }
 
 class _CenterMarker extends StatelessWidget {
+  const _CenterMarker();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -485,212 +380,3 @@ class _RadarUserBubble extends StatelessWidget {
   const _RadarUserBubble({
     required this.nickname,
     required this.dotColor,
-    required this.active,
-  });
-
-  final String nickname;
-  final Color dotColor;
-  final bool active;
-
-  @override
-  Widget build(BuildContext context) {
-    final initial = nickname.isNotEmpty ? nickname[0].toUpperCase() : 'N';
-
-    return AnimatedScale(
-      duration: const Duration(milliseconds: 180),
-      scale: active ? 1.16 : 1.0,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(3),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: active ? AppColors.royalPurple : Colors.white24,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.royalPurple.withOpacity(active ? 0.65 : 0.25),
-                      blurRadius: active ? 20 : 10,
-                    ),
-                  ],
-                ),
-                child: CircleAvatar(
-                  radius: 25,
-                  backgroundColor: AppColors.accentPurple,
-                  child: Text(
-                    initial,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                right: 0,
-                bottom: 2,
-                child: Container(
-                  width: 15,
-                  height: 15,
-                  decoration: BoxDecoration(
-                    color: dotColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: const Color(0xFF111A2D),
-                      width: 3,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          SizedBox(
-            width: 70,
-            child: Text(
-              nickname,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StatusCard extends StatelessWidget {
-  const _StatusCard({required this.userCount});
-
-  final int userCount;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.darkSurface,
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.groups_rounded, color: AppColors.royalPurple, size: 34),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Nearby Users',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '$userCount people nearby',
-                  style: const TextStyle(color: Colors.white70),
-                ),
-              ],
-            ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.refresh_rounded),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _LegendCard extends StatelessWidget {
-  const _LegendCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.darkSurface,
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: const Wrap(
-        spacing: 14,
-        runSpacing: 12,
-        children: [
-          _LegendItem(color: Colors.greenAccent, text: 'Very Close'),
-          _LegendItem(color: Colors.yellowAccent, text: 'Nearby'),
-          _LegendItem(color: Colors.orangeAccent, text: 'Far'),
-          _LegendItem(color: Colors.redAccent, text: 'Edge'),
-        ],
-      ),
-    );
-  }
-}
-
-class _LegendItem extends StatelessWidget {
-  const _LegendItem({
-    required this.color,
-    required this.text,
-  });
-
-  final Color color;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 11,
-          height: 11,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-        ),
-        const SizedBox(width: 7),
-        Text(text),
-      ],
-    );
-  }
-}
-
-class _ActionTile extends StatelessWidget {
-  const _ActionTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.color,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final Color color;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      child: ListTile(
-        onTap: onTap,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-        tileColor: color.withOpacity(0.18),
-        leading: Icon(icon, color: color),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w800),
-        ),
-        subtitle: Text(subtitle),
-        trailing: const Icon(Icons.chevron_right_rounded),
-      ),
-    );
-  }
-}
