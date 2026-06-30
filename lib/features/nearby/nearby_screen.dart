@@ -48,6 +48,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
     required String proximity,
   }) {
     showModalBottomSheet(
+  isScrollControlled: true,
       context: context,
       backgroundColor: AppColors.darkSurface,
       shape: const RoundedRectangleBorder(
