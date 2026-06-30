@@ -166,18 +166,141 @@ class _NearbyScreenState extends State<NearbyScreen> {
                   icon: Icons.block_rounded,
                   title: 'Block User',
                   subtitle: 'Block future interaction',
+void _showUserActions({
+  required String nickname,
+  required String bio,
+  required Color dotColor,
+  required String proximity,
+}) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: AppColors.darkSurface,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+    ),
+    builder: (_) {
+      return SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 18, 24, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 46,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.white24,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 44,
+                      backgroundColor: AppColors.royalPurple,
+                      child: Text(
+                        nickname.isNotEmpty ? nickname[0].toUpperCase() : 'N',
+                        style: const TextStyle(
+                          fontSize: 34,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 4,
+                      bottom: 4,
+                      child: Container(
+                        width: 17,
+                        height: 17,
+                        decoration: BoxDecoration(
+                          color: dotColor,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.darkSurface,
+                            width: 3,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  nickname,
+                  style: const TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 9,
+                      height: 9,
+                      decoration: BoxDecoration(
+                        color: dotColor,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      proximity,
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                  ],
+                ),
+                if (bio.isNotEmpty) ...[
+                  const SizedBox(height: 10),
+                  Text(
+                    bio,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white60),
+                  ),
+                ],
+                const SizedBox(height: 22),
+                _ActionTile(
+                  icon: Icons.waving_hand_rounded,
+                  title: 'Say Hi',
+                  subtitle: 'Send a hi request',
+                  color: AppColors.royalPurple,
+                  onTap: () => Navigator.pop(context),
+                ),
+                _ActionTile(
+                  icon: Icons.chat_bubble_rounded,
+                  title: 'Chat',
+                  subtitle: 'Available after Hi is accepted',
+                  color: Colors.blueGrey,
+                  onTap: () => Navigator.pop(context),
+                ),
+                _ActionTile(
+                  icon: Icons.visibility_off_rounded,
+                  title: 'Hide User',
+                  subtitle: 'Hide from your radar',
+                  color: Colors.orange,
+                  onTap: () => Navigator.pop(context),
+                ),
+                _ActionTile(
+                  icon: Icons.block_rounded,
+                  title: 'Block User',
+                  subtitle: 'Block future interaction',
                   color: Colors.red,
                   onTap: () => Navigator.pop(context),
                 ),
               ],
             ),
-           ),
           ),
-         ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
 
   @override
   Widget build(BuildContext context) {
