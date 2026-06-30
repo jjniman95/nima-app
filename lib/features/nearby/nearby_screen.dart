@@ -55,7 +55,8 @@ class _NearbyScreenState extends State<NearbyScreen> {
       ),
       builder: (_) {
         return SafeArea(
-          child: Padding(
+  child: SingleChildScrollView(
+    child: Padding(
             padding: const EdgeInsets.fromLTRB(24, 18, 24, 24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
