@@ -21,14 +21,21 @@ class _HiRequestsScreenState extends State<HiRequestsScreen> {
   }
 
   Future<void> _loadLocalUser() async {
-    final prefs = await SharedPreferences.getInstance();
+  final prefs = await SharedPreferences.getInstance();
 
-    if (!mounted) return;
+  var id = prefs.getString('localUserId');
 
-    setState(() {
-      localUserId = prefs.getString('localUserId');
-    });
+  if (id == null || id.isEmpty) {
+    id = 'local_${DateTime.now().millisecondsSinceEpoch}';
+    await prefs.setString('localUserId', id);
   }
+
+  if (!mounted) return;
+
+  setState(() {
+    localUserId = id;
+  });
+}
 
   Stream<QuerySnapshot<Map<String, dynamic>>> _requestsStream() {
     return FirebaseFirestore.instance
