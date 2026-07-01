@@ -4,16 +4,18 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text.dart';
 import '../../core/widgets/nima_feature_card.dart';
 import '../../core/widgets/nima_gradient_logo.dart';
-import '../auth/login_screen.dart';
+import '../profile/create_profile_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
 
   void _goLogin(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
-    );
-  }
+  Navigator.of(context).pushReplacement(
+    MaterialPageRoute(
+      builder: (_) => const CreateProfileScreen(),
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
