@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/app_colors.dart';
 
@@ -14,6 +15,23 @@ class NearbyScreen extends StatefulWidget {
 
 class _NearbyScreenState extends State<NearbyScreen> {
   int? selectedIndex;
+  String? localUserId;
+  String localNickname = 'NIMA User';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLocalUser();
+  }
+
+  Future<void> _loadLocalUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
+    setState(() {
+      localUserId = prefs.getString('localUserId');
+      localNickname = prefs.getString('localNickname') ?? 'NIMA User';
+    });
+  }
 
   Color _dotColor(int index) {
     switch (index % 4) {
@@ -41,16 +59,73 @@ class _NearbyScreenState extends State<NearbyScreen> {
     }
   }
 
+  Future<void> _sendHi({
+    required String receiverId,
+    required String receiverNickname,
+  }) async {
+    final senderId = localUserId;
+
+    if (senderId == null || senderId.isEmpty) {
+      _showSnack('Please create your profile first.');
+      return;
+    }
+
+    if (senderId == receiverId) {
+      _showSnack('This is your own profile.');
+      return;
+    }
+
+    final now = Timestamp.now();
+    final expiresAt = Timestamp.fromDate(
+      DateTime.now().add(const Duration(minutes: 10)),
+    );
+
+    try {
+      await FirebaseFirestore.instance.collection('hi_requests').add({
+        'senderId': senderId,
+        'senderNickname': localNickname,
+        'receiverId': receiverId,
+        'receiverNickname': receiverNickname,
+        'status': 'pending',
+        'createdAt': now,
+        'expiresAt': expiresAt,
+        'lastActivityAt': now,
+        'nearbyOnly': true,
+        'requiresReacceptAfterMinutes': 10,
+      });
+
+      if (!mounted) return;
+      Navigator.pop(context);
+      _showSnack('Hi sent to $receiverNickname 👋');
+    } catch (e) {
+      _showSnack('Could not send Hi. Please try again.');
+    }
+  }
+
+  void _showSnack(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
   void _showUserActions({
+    required String userId,
     required String nickname,
     required String bio,
     required Color dotColor,
     required String proximity,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final sheetColor = isDark ? AppColors.darkSurface : Colors.white;
+    final textColor = isDark ? Colors.white : AppColors.textDark;
+    final mutedColor = isDark ? Colors.white70 : AppColors.textMuted;
+    final dividerColor = isDark ? Colors.white24 : Colors.black12;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.darkSurface,
+      backgroundColor: sheetColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
@@ -65,7 +140,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
                   width: 46,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: Colors.white24,
+                    color: dividerColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
@@ -93,10 +168,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
                         decoration: BoxDecoration(
                           color: dotColor,
                           shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.darkSurface,
-                            width: 3,
-                          ),
+                          border: Border.all(color: sheetColor, width: 3),
                         ),
                       ),
                     ),
@@ -105,10 +177,10 @@ class _NearbyScreenState extends State<NearbyScreen> {
                 const SizedBox(height: 12),
                 Text(
                   nickname,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.w900,
-                    color: Colors.white,
+                    color: textColor,
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -124,10 +196,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      proximity,
-                      style: const TextStyle(color: Colors.white70),
-                    ),
+                    Text(proximity, style: TextStyle(color: mutedColor)),
                   ],
                 ),
                 if (bio.isNotEmpty) ...[
@@ -135,35 +204,38 @@ class _NearbyScreenState extends State<NearbyScreen> {
                   Text(
                     bio,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white60),
+                    style: TextStyle(color: mutedColor),
                   ),
                 ],
                 const SizedBox(height: 22),
                 _ActionTile(
                   icon: Icons.waving_hand_rounded,
                   title: 'Say Hi',
-                  subtitle: 'Send a hi request',
+                  subtitle: 'Send a nearby-only request',
                   color: AppColors.royalPurple,
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => _sendHi(receiverId: userId, receiverNickname: nickname),
                 ),
                 _ActionTile(
                   icon: Icons.chat_bubble_rounded,
                   title: 'Chat',
-                  subtitle: 'Available after Hi is accepted',
+                  subtitle: 'Only after Hi is accepted',
                   color: Colors.blueGrey,
-                  onTap: () => Navigator.pop(context),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _showSnack('Chat unlocks after Hi is accepted.');
+                  },
                 ),
                 _ActionTile(
                   icon: Icons.visibility_off_rounded,
                   title: 'Hide User',
-                  subtitle: 'Hide from your radar',
+                  subtitle: 'Hide from your radar later',
                   color: Colors.orange,
                   onTap: () => Navigator.pop(context),
                 ),
                 _ActionTile(
                   icon: Icons.block_rounded,
                   title: 'Block User',
-                  subtitle: 'Block future interaction',
+                  subtitle: 'Block future interaction later',
                   color: Colors.red,
                   onTap: () => Navigator.pop(context),
                 ),
@@ -175,8 +247,14 @@ class _NearbyScreenState extends State<NearbyScreen> {
     );
   }
 
+  Stream<QuerySnapshot<Map<String, dynamic>>> _usersStream() {
+    return FirebaseFirestore.instance.collection('users').snapshots();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nearby'),
@@ -188,22 +266,19 @@ class _NearbyScreenState extends State<NearbyScreen> {
         ],
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: FirebaseFirestore.instance.collection('users').snapshots(),
+        stream: _usersStream(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Center(
-              child: Text('Something went wrong loading nearby users.'),
-            );
+            return const Center(child: Text('Something went wrong loading nearby users.'));
           }
-
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final users = snapshot.data!.docs;
+          final users = snapshot.data!.docs.where((doc) => doc.id != localUserId).toList();
 
           if (users.isEmpty) {
-            return const Center(child: Text('No users yet.'));
+            return const Center(child: Text('No nearby Pulses yet.'));
           }
 
           return LayoutBuilder(
@@ -224,21 +299,14 @@ class _NearbyScreenState extends State<NearbyScreen> {
                           _RadarBackground(size: radarSize),
                           const _CenterMarker(),
                           ...List.generate(visibleCount, (index) {
-                            final data = users[index].data();
-
-                            final nickname =
-                                (data['nickname'] ?? 'NIMA User').toString();
+                            final doc = users[index];
+                            final data = doc.data();
+                            final nickname = (data['nickname'] ?? 'NIMA User').toString();
                             final bio = (data['bio'] ?? '').toString();
-
-                            final angle =
-                                (2 * math.pi / visibleCount) * index -
-                                    math.pi / 2;
-                            final radius =
-                                radarSize * (0.28 + (index % 3) * 0.12);
-
+                            final angle = (2 * math.pi / visibleCount) * index - math.pi / 2;
+                            final radius = radarSize * (0.28 + (index % 3) * 0.12);
                             final x = math.cos(angle) * radius;
                             final y = math.sin(angle) * radius;
-
                             final active = selectedIndex == index;
                             final dotColor = _dotColor(index);
                             final proximity = _proximityText(index);
@@ -249,6 +317,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
                                 onTap: () {
                                   setState(() => selectedIndex = index);
                                   _showUserActions(
+                                    userId: doc.id,
                                     nickname: nickname,
                                     bio: bio,
                                     dotColor: dotColor,
@@ -259,6 +328,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
                                   nickname: nickname,
                                   dotColor: dotColor,
                                   active: active,
+                                  isDark: isDark,
                                 ),
                               ),
                             );
@@ -288,34 +358,52 @@ class _RadarBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       width: size,
       height: size,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: RadialGradient(
-          colors: [
-            Color(0xFF24124A),
-            Color(0xFF111A2D),
-          ],
+          colors: isDark
+              ? const [Color(0xFF24124A), Color(0xFF111A2D)]
+              : const [Color(0xFFF7F2FF), Color(0xFFEFF6FF)],
         ),
+        border: Border.all(
+          color: isDark
+              ? AppColors.royalPurple.withOpacity(0.45)
+              : AppColors.royalPurple.withOpacity(0.18),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? AppColors.royalPurple.withOpacity(0.16)
+                : Colors.black.withOpacity(0.05),
+            blurRadius: 22,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
-      child: CustomPaint(
-        painter: _RadarPainter(),
-      ),
+      child: CustomPaint(painter: _RadarPainter(isDark: isDark)),
     );
   }
 }
 
 class _RadarPainter extends CustomPainter {
+  _RadarPainter({required this.isDark});
+
+  final bool isDark;
+
   @override
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
-
     final ringPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.2
-      ..color = AppColors.royalPurple.withOpacity(0.45);
+      ..color = isDark
+          ? AppColors.royalPurple.withOpacity(0.45)
+          : AppColors.royalPurple.withOpacity(0.22);
 
     for (int i = 1; i <= 4; i++) {
       canvas.drawCircle(center, size.width * i / 9, ringPaint);
@@ -323,23 +411,18 @@ class _RadarPainter extends CustomPainter {
 
     final linePaint = Paint()
       ..strokeWidth = 1
-      ..color = Colors.white.withOpacity(0.05);
+      ..color = isDark
+          ? Colors.white.withOpacity(0.05)
+          : AppColors.royalPurple.withOpacity(0.08);
 
-    canvas.drawLine(
-      Offset(center.dx, 0),
-      Offset(center.dx, size.height),
-      linePaint,
-    );
-
-    canvas.drawLine(
-      Offset(0, center.dy),
-      Offset(size.width, center.dy),
-      linePaint,
-    );
+    canvas.drawLine(Offset(center.dx, 0), Offset(center.dx, size.height), linePaint);
+    canvas.drawLine(Offset(0, center.dy), Offset(size.width, center.dy), linePaint);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _RadarPainter oldDelegate) {
+    return oldDelegate.isDark != isDark;
+  }
 }
 
 class _CenterMarker extends StatelessWidget {
@@ -347,6 +430,9 @@ class _CenterMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final labelColor = isDark ? Colors.white : AppColors.textDark;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -354,26 +440,19 @@ class _CenterMarker extends StatelessWidget {
           width: 74,
           height: 74,
           decoration: BoxDecoration(
-            color: AppColors.royalPurple.withOpacity(0.9),
+            color: AppColors.royalPurple.withOpacity(0.95),
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: AppColors.royalPurple.withOpacity(0.45),
+                color: AppColors.royalPurple.withOpacity(0.38),
                 blurRadius: 22,
               ),
             ],
           ),
-          child: const Icon(
-            Icons.my_location_rounded,
-            color: Colors.white,
-            size: 34,
-          ),
+          child: const Icon(Icons.my_location_rounded, color: Colors.white, size: 34),
         ),
         const SizedBox(height: 6),
-        const Text(
-          'You',
-          style: TextStyle(fontWeight: FontWeight.w800),
-        ),
+        Text('You', style: TextStyle(fontWeight: FontWeight.w800, color: labelColor)),
       ],
     );
   }
@@ -384,15 +463,18 @@ class _RadarUserBubble extends StatelessWidget {
     required this.nickname,
     required this.dotColor,
     required this.active,
+    required this.isDark,
   });
 
   final String nickname;
   final Color dotColor;
   final bool active;
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {
     final initial = nickname.isNotEmpty ? nickname[0].toUpperCase() : 'N';
+    final labelColor = isDark ? Colors.white : AppColors.textDark;
 
     return AnimatedScale(
       duration: const Duration(milliseconds: 180),
@@ -406,12 +488,14 @@ class _RadarUserBubble extends StatelessWidget {
                 padding: const EdgeInsets.all(3),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: active ? AppColors.royalPurple : Colors.white24,
+                  color: active
+                      ? AppColors.royalPurple
+                      : isDark
+                          ? Colors.white24
+                          : Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.royalPurple.withOpacity(
-                        active ? 0.65 : 0.25,
-                      ),
+                      color: AppColors.royalPurple.withOpacity(active ? 0.65 : 0.22),
                       blurRadius: active ? 20 : 10,
                     ),
                   ],
@@ -439,7 +523,7 @@ class _RadarUserBubble extends StatelessWidget {
                     color: dotColor,
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: const Color(0xFF111A2D),
+                      color: isDark ? const Color(0xFF111A2D) : Colors.white,
                       width: 3,
                     ),
                   ),
@@ -455,10 +539,7 @@ class _RadarUserBubble extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: labelColor),
             ),
           ),
         ],
@@ -474,43 +555,47 @@ class _StatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = isDark ? AppColors.darkSurface : Colors.white;
+    final textColor = isDark ? Colors.white : AppColors.textDark;
+    final mutedColor = isDark ? Colors.white70 : AppColors.textMuted;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.darkSurface,
+        color: cardColor,
         borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: isDark ? Colors.white.withOpacity(0.06) : Colors.black12),
+        boxShadow: [
+          if (!isDark)
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 22,
+              offset: const Offset(0, 10),
+            ),
+        ],
       ),
       child: Row(
         children: [
-          const Icon(
-            Icons.groups_rounded,
-            color: AppColors.royalPurple,
-            size: 34,
-          ),
+          const Icon(Icons.groups_rounded, color: AppColors.royalPurple, size: 34),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Nearby Users',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                  ),
+                Text(
+                  'Nearby Pulses',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: textColor),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  '$userCount people nearby',
-                  style: const TextStyle(color: Colors.white70),
-                ),
+                Text('$userCount Pulses nearby', style: TextStyle(color: mutedColor)),
               ],
             ),
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.refresh_rounded),
+            icon: Icon(Icons.refresh_rounded, color: isDark ? Colors.white : AppColors.textDark),
           ),
         ],
       ),
@@ -523,89 +608,15 @@ class _LegendCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = isDark ? AppColors.darkSurface : Colors.white;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.darkSurface,
+        color: cardColor,
         borderRadius: BorderRadius.circular(24),
-      ),
-      child: const Wrap(
-        spacing: 14,
-        runSpacing: 12,
-        children: [
-          _LegendItem(color: Colors.greenAccent, text: 'Very Close'),
-          _LegendItem(color: Colors.yellowAccent, text: 'Nearby'),
-          _LegendItem(color: Colors.orangeAccent, text: 'Far'),
-          _LegendItem(color: Colors.redAccent, text: 'Edge'),
-        ],
-      ),
-    );
-  }
-}
-
-class _LegendItem extends StatelessWidget {
-  const _LegendItem({
-    required this.color,
-    required this.text,
-  });
-
-  final Color color;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 11,
-          height: 11,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
-        ),
-        const SizedBox(width: 7),
-        Text(text),
-      ],
-    );
-  }
-}
-
-class _ActionTile extends StatelessWidget {
-  const _ActionTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.color,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final Color color;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      child: ListTile(
-        onTap: onTap,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
-        ),
-        tileColor: color.withOpacity(0.18),
-        leading: Icon(icon, color: color),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w800),
-        ),
-        subtitle: Text(subtitle),
-        trailing: const Icon(Icons.chevron_right_rounded),
-      ),
-    );
-  }
-}
+        border: Border.all(color: isDark ? Colors.white.withOpacity(0.06) : Colors.black12),
+        boxShadow: [
+  
