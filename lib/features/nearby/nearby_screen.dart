@@ -619,4 +619,90 @@ class _LegendCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: isDark ? Colors.white.withOpacity(0.06) : Colors.black12),
         boxShadow: [
-  
+          if (!isDark)
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 22,
+              offset: const Offset(0, 10),
+            ),
+        ],
+      ),
+      child: const Wrap(
+        spacing: 14,
+        runSpacing: 12,
+        children: [
+          _LegendItem(color: Colors.greenAccent, text: 'Very Close'),
+          _LegendItem(color: Colors.yellowAccent, text: 'Nearby'),
+          _LegendItem(color: Colors.orangeAccent, text: 'Far'),
+          _LegendItem(color: Colors.redAccent, text: 'Edge'),
+        ],
+      ),
+    );
+  }
+}
+
+class _LegendItem extends StatelessWidget {
+  const _LegendItem({required this.color, required this.text});
+
+  final Color color;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : AppColors.textDark;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 11,
+          height: 11,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+            border: Border.all(color: isDark ? Colors.white24 : Colors.black12),
+          ),
+        ),
+        const SizedBox(width: 7),
+        Text(text, style: TextStyle(color: textColor)),
+      ],
+    );
+  }
+}
+
+class _ActionTile extends StatelessWidget {
+  const _ActionTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.color,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : AppColors.textDark;
+    final mutedColor = isDark ? Colors.white70 : AppColors.textMuted;
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: ListTile(
+        onTap: onTap,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        tileColor: color.withOpacity(isDark ? 0.18 : 0.10),
+        leading: Icon(icon, color: color),
+        title: Text(title, style: TextStyle(fontWeight: FontWeight.w800, color: textColor)),
+        subtitle: Text(subtitle, style: TextStyle(color: mutedColor)),
+        trailing: Icon(Icons.chevron_right_rounded, color: mutedColor),
+      ),
+    );
+  }
+}
