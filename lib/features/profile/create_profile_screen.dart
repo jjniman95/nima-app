@@ -40,18 +40,26 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     super.dispose();
   }
 
-  void _continue() {
-    if (nicknameController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a nickname.')),
-      );
-      return;
-    }
-
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
+  Future<void> _continue() async {
+  if (nicknameController.text.trim().isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Please enter a nickname.'),
+      ),
     );
+    return;
   }
+
+  final prefs = await SharedPreferences.getInstance();
+
+  await prefs.setBool('profileCompleted', true);
+
+  Navigator.of(context).pushReplacement(
+    MaterialPageRoute(
+      builder: (_) => const HomeScreen(),
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
