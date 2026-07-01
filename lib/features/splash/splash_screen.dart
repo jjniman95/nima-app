@@ -6,6 +6,8 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text.dart';
 import '../../core/widgets/nima_gradient_logo.dart';
 import '../onboarding/onboarding_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../home/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,15 +19,27 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    super.initState();
+ @override
+void initState() {
+  super.initState();
+  _checkProfile();
+}
 
-    Timer(const Duration(seconds: 2), () {
-      if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const OnboardingScreen()),
-      );
-    });
-  }
+Future<void> _checkProfile() async {
+  await Future.delayed(const Duration(seconds: 2));
+
+  final prefs = await SharedPreferences.getInstance();
+  final completed = prefs.getBool('profileCompleted') ?? false;
+
+  if (!mounted) return;
+
+  Navigator.of(context).pushReplacement(
+    MaterialPageRoute(
+      builder: (_) =>
+          completed ? const HomeScreen() : const OnboardingScreen(),
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
