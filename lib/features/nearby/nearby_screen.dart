@@ -256,15 +256,15 @@ class _NearbyScreenState extends State<NearbyScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Nearby'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.tune_rounded),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: NimaAppBar(
+  title: "Nearby",
+  actions: [
+    IconButton(
+      onPressed: () {},
+      icon: const Icon(Icons.tune_rounded),
+    ),
+  ],
+),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: _usersStream(),
         builder: (context, snapshot) {
