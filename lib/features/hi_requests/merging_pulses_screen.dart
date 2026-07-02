@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../conversation/conversation_screen.dart';
 import '../../core/constants/app_colors.dart';
 import '../home/home_screen.dart';
 
@@ -56,11 +57,13 @@ class _MergingPulsesScreenState extends State<MergingPulsesScreen> {
 
     if (!mounted) return;
 
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
-      (route) => false,
-    );
-  }
+    Navigator.of(context).pushReplacement(
+  MaterialPageRoute(
+    builder: (_) => ConversationScreen(
+      pulseName: widget.otherPulseName,
+    ),
+  ),
+);
 
   @override
   Widget build(BuildContext context) {
