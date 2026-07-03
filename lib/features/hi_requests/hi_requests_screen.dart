@@ -43,11 +43,17 @@ class _HiRequestsScreenState extends State<HiRequestsScreen> {
     });
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> _requestsStream() {
-    return FirebaseFirestore.instance
-        .collection('hi_requests')
-        .orderBy('createdAt', descending: true)
-        .snapshots();
+  Stream<List<HiRequest>> _requestsStream() {
+  if (localUserId == null) {
+    return const Stream.empty();
+  }
+
+  Stream<List<HiRequest>> _requestsStream() {
+  if (localUserId == null) {
+    return const Stream.empty();
+  }
+
+  return pulseService.streamHiRequests(localUserId!);
   }
 
   bool _isExpired(Map<String, dynamic> data) {
@@ -178,7 +184,7 @@ class _HiRequestsScreenState extends State<HiRequestsScreen> {
       ),
       body: userId == null
           ? const Center(child: CircularProgressIndicator())
-          : StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          : StreamBuilder<List<HiRequest>>(
               stream: _requestsStream(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
@@ -191,7 +197,7 @@ class _HiRequestsScreenState extends State<HiRequestsScreen> {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                final requests = snapshot.data!.docs.where((doc) {
+                final requests = snapshot.data!;
                   final data = doc.data();
                   return data['senderId'] == userId ||
                       data['receiverId'] == userId;
@@ -207,8 +213,7 @@ class _HiRequestsScreenState extends State<HiRequestsScreen> {
                   padding: const EdgeInsets.all(18),
                   itemCount: requests.length,
                   itemBuilder: (context, index) {
-                    final doc = requests[index];
-                    final data = doc.data();
+                    final request = requests[index];
 
                     final senderId = data['senderId']?.toString() ?? '';
                     final receiverId = data['receiverId']?.toString() ?? '';
