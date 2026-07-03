@@ -510,7 +510,6 @@ class _RadarUserBubble extends StatelessWidget {
 }
 
 class _StatusCard extends StatelessWidget {
-class _StatusCard extends StatelessWidget {
   const _StatusCard({required this.userCount});
 
   final int userCount;
@@ -635,7 +634,6 @@ class _LegendItem extends StatelessWidget {
       ],
     );
   }
-}
 }
 class _ActionTile extends StatelessWidget {
   const _ActionTile({
