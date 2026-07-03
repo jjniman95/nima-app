@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/widgets/nima_avatar.dart';
 import '../../core/constants/app_colors.dart';
 
 class NearbyScreen extends StatefulWidget {
@@ -560,20 +561,11 @@ class _StatusCard extends StatelessWidget {
     final textColor = isDark ? Colors.white : AppColors.textDark;
     final mutedColor = isDark ? Colors.white70 : AppColors.textMuted;
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: isDark ? Colors.white.withOpacity(0.06) : Colors.black12),
-        boxShadow: [
-          if (!isDark)
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 22,
-              offset: const Offset(0, 10),
-            ),
+    return NimaAvatar(
+  nickname: nickname,
+  statusColor: dotColor,
+  size: 50,
+),
         ],
       ),
       child: Row(
