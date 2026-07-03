@@ -31,39 +31,40 @@ class _MergingPulsesScreenState extends State<MergingPulsesScreen> {
   }
 
   Future<void> _startMerge() async {
-    await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(const Duration(seconds: 2));
 
-    if (!mounted) return;
+  if (!mounted) return;
 
-    setState(() => merged = true);
+  setState(() => merged = true);
 
-    final expiresAt = Timestamp.fromDate(
-      DateTime.now().add(const Duration(minutes: 10)),
-    );
+  final expiresAt = Timestamp.fromDate(
+    DateTime.now().add(const Duration(minutes: 10)),
+  );
 
-    await FirebaseFirestore.instance
-        .collection('conversations')
-        .doc(widget.conversationId)
-        .update({
-      'mergeState': 'merged',
-      'status': 'active',
-      'mergedAt': FieldValue.serverTimestamp(),
-      'lastActivityAt': FieldValue.serverTimestamp(),
-      'expiresAt': expiresAt,
-      'updatedAt': FieldValue.serverTimestamp(),
-    });
+  await FirebaseFirestore.instance
+      .collection('conversations')
+      .doc(widget.conversationId)
+      .update({
+    'mergeState': 'merged',
+    'status': 'active',
+    'mergedAt': FieldValue.serverTimestamp(),
+    'lastActivityAt': FieldValue.serverTimestamp(),
+    'expiresAt': expiresAt,
+    'updatedAt': FieldValue.serverTimestamp(),
+  });
 
-    await Future.delayed(const Duration(seconds: 1));
+  await Future.delayed(const Duration(seconds: 1));
 
-    if (!mounted) return;
+  if (!mounted) return;
 
-    Navigator.of(context).pushReplacement(
-  MaterialPageRoute(
-    builder: (_) => ConversationScreen(
-      pulseName: widget.otherPulseName,
+  Navigator.of(context).pushReplacement(
+    MaterialPageRoute(
+      builder: (_) => ConversationScreen(
+        pulseName: widget.otherPulseName,
+      ),
     ),
-  ),
-);
+  );
+  }
 
   @override
   Widget build(BuildContext context) {
