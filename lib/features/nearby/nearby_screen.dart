@@ -636,7 +636,7 @@ class _LegendItem extends StatelessWidget {
     );
   }
 }
-
+}
 class _ActionTile extends StatelessWidget {
   const _ActionTile({
     required this.icon,
