@@ -145,9 +145,10 @@ class _HiRequestsScreenState extends State<HiRequestsScreen> {
     final userId = localUserId;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Hi Requests'),
-      ),
+      appBar: NimaAppBar(
+  title: pulseName,
+  subtitle: "🟢 Pulses Merged",
+),
       body: userId == null
           ? const Center(child: CircularProgressIndicator())
           : StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
