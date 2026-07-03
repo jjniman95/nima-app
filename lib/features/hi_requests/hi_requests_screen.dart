@@ -1,3 +1,4 @@
+import '../../services/firebase_pulse_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,7 +40,7 @@ class _HiRequestsScreenState extends State<HiRequestsScreen> {
     });
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> _requestsStream() {
+  Stream<QuerySnapshot<Map<String, dynamic>>> pulseService.streamHiRequests(userId) {
     return FirebaseFirestore.instance
         .collection('hi_requests')
         .orderBy('createdAt', descending: true)
@@ -72,7 +73,7 @@ class _HiRequestsScreenState extends State<HiRequestsScreen> {
     return ids.join('_');
   }
 
-  Future<void> _acceptRequest({
+  Future<void> pulseService.acceptHi({
     required String requestId,
     required Map<String, dynamic> data,
     required String otherPulseName,
@@ -148,7 +149,7 @@ class _HiRequestsScreenState extends State<HiRequestsScreen> {
     );
   }
 
-  Future<void> _declineRequest(String requestId) async {
+  Future<void> pulseService.declineHi(String requestId) async {
     await FirebaseFirestore.instance
         .collection('hi_requests')
         .doc(requestId)
