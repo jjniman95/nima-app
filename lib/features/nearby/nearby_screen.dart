@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/widgets/nima_app_bar.dart';
 import '../../core/widgets/nima_avatar.dart';
 import '../../core/constants/app_colors.dart';
 
@@ -474,7 +475,6 @@ class _RadarUserBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final initial = nickname.isNotEmpty ? nickname[0].toUpperCase() : 'N';
     final labelColor = isDark ? Colors.white : AppColors.textDark;
 
     return AnimatedScale(
@@ -483,54 +483,10 @@ class _RadarUserBubble extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Stack(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(3),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: active
-                      ? AppColors.royalPurple
-                      : isDark
-                          ? Colors.white24
-                          : Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.royalPurple.withOpacity(active ? 0.65 : 0.22),
-                      blurRadius: active ? 20 : 10,
-                    ),
-                  ],
-                ),
-                child: CircleAvatar(
-                  radius: 25,
-                  backgroundColor: AppColors.accentPurple,
-                  child: Text(
-                    initial,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                right: 0,
-                bottom: 2,
-                child: Container(
-                  width: 15,
-                  height: 15,
-                  decoration: BoxDecoration(
-                    color: dotColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: isDark ? const Color(0xFF111A2D) : Colors.white,
-                      width: 3,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          NimaAvatar(
+            nickname: nickname,
+            statusColor: dotColor,
+            size: 50,
           ),
           const SizedBox(height: 4),
           SizedBox(
@@ -540,7 +496,11 @@ class _RadarUserBubble extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: labelColor),
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: labelColor,
+              ),
             ),
           ),
         ],
@@ -549,6 +509,7 @@ class _RadarUserBubble extends StatelessWidget {
   }
 }
 
+class _StatusCard extends StatelessWidget {
 class _StatusCard extends StatelessWidget {
   const _StatusCard({required this.userCount});
 
@@ -561,12 +522,15 @@ class _StatusCard extends StatelessWidget {
     final textColor = isDark ? Colors.white : AppColors.textDark;
     final mutedColor = isDark ? Colors.white70 : AppColors.textMuted;
 
-    return NimaAvatar(
-  nickname: nickname,
-  statusColor: dotColor,
-  size: 50,
-),
-        ],
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isDark ? Colors.white.withOpacity(0.06) : Colors.black12,
+        ),
       ),
       child: Row(
         children: [
@@ -578,16 +542,26 @@ class _StatusCard extends StatelessWidget {
               children: [
                 Text(
                   'Nearby Pulses',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: textColor),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    color: textColor,
+                  ),
                 ),
                 const SizedBox(height: 4),
-                Text('$userCount Pulses nearby', style: TextStyle(color: mutedColor)),
+                Text(
+                  '$userCount Pulses nearby',
+                  style: TextStyle(color: mutedColor),
+                ),
               ],
             ),
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.refresh_rounded, color: isDark ? Colors.white : AppColors.textDark),
+            icon: Icon(
+              Icons.refresh_rounded,
+              color: isDark ? Colors.white : AppColors.textDark,
+            ),
           ),
         ],
       ),
