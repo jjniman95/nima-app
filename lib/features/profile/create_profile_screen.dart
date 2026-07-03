@@ -41,7 +41,10 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   }
 
   Future<void> _continue() async {
-  if (nicknameController.text.trim().isEmpty) {
+  final nickname = nicknameController.text.trim();
+  final bio = bioController.text.trim();
+
+  if (nickname.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Please enter a nickname.'),
@@ -52,14 +55,38 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
   final prefs = await SharedPreferences.getInstance();
 
+  var localUserId = prefs.getString('localUserId');
+
+  if (localUserId == null || localUserId.isEmpty) {
+    localUserId = 'local_${DateTime.now().millisecondsSinceEpoch}';
+    await prefs.setString('localUserId', localUserId);
+  }
+
+  await FirebaseFirestore.instance.collection('users').doc(localUserId).set({
+    'uid': localUserId,
+    'nickname': nickname,
+    'bio': bio,
+    'age': age,
+    'gender': gender,
+    'interests': selected.toList(),
+    'locationAllowed': locationAllowed,
+    'visibility': visible,
+    'isOnline': true,
+    'lastSeen': FieldValue.serverTimestamp(),
+    'createdAt': FieldValue.serverTimestamp(),
+    'updatedAt': FieldValue.serverTimestamp(),
+  }, SetOptions(merge: true));
+
   await prefs.setBool('profileCompleted', true);
+  await prefs.setString('localNickname', nickname);
+  await prefs.setString('localBio', bio);
 
   Navigator.of(context).pushReplacement(
     MaterialPageRoute(
       builder: (_) => const HomeScreen(),
     ),
   );
-}
+  }
 
   @override
   Widget build(BuildContext context) {
