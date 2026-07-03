@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/widgets/nima_app_bar.dart';
 import '../../core/constants/app_colors.dart';
 import 'merging_pulses_screen.dart';
 
@@ -145,9 +146,8 @@ class _HiRequestsScreenState extends State<HiRequestsScreen> {
     final userId = localUserId;
 
     return Scaffold(
-      appBar: NimaAppBar(
-  title: pulseName,
-  subtitle: "🟢 Pulses Merged",
+      appBar: const NimaAppBar(
+  title: 'Hi Requests',
 ),
       body: userId == null
           ? const Center(child: CircularProgressIndicator())
