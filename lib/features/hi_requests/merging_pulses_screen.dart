@@ -1,11 +1,8 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../conversation/conversation_screen.dart';
 import '../../core/constants/app_colors.dart';
-import '../home/home_screen.dart';
 
 class MergingPulsesScreen extends StatefulWidget {
   const MergingPulsesScreen({
