@@ -662,15 +662,26 @@ class _ActionTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       child: ListTile(
         onTap: onTap,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+        ),
         tileColor: color.withOpacity(isDark ? 0.18 : 0.10),
         leading: Icon(icon, color: color),
-        title: Text(title, style: TextStyle(fontWeight: FontWeight.w800, color: textColor)),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.w800,
+            color: textColor,
+          ),
+        ),
         subtitle: Text(
-  this.subtitle,
-  style: TextStyle(color: mutedColor),
-),
-        trailing: Icon(Icons.chevron_right_rounded, color: mutedColor),
+          subtitle,
+          style: TextStyle(color: mutedColor),
+        ),
+        trailing: Icon(
+          Icons.chevron_right_rounded,
+          color: mutedColor,
+        ),
       ),
     );
   }
