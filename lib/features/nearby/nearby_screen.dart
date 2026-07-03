@@ -666,7 +666,10 @@ class _ActionTile extends StatelessWidget {
         tileColor: color.withOpacity(isDark ? 0.18 : 0.10),
         leading: Icon(icon, color: color),
         title: Text(title, style: TextStyle(fontWeight: FontWeight.w800, color: textColor)),
-        subtitle: Text(subtitle, style: TextStyle(color: mutedColor)),
+        subtitle: Text(
+  this.subtitle,
+  style: TextStyle(color: mutedColor),
+),
         trailing: Icon(Icons.chevron_right_rounded, color: mutedColor),
       ),
     );
