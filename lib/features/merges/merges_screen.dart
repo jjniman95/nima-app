@@ -4,11 +4,16 @@ class MergesScreen extends StatefulWidget {
   const MergesScreen({super.key});
 
   @override
+  State<MergesScreen> createState() => _MergesScreenState();
+}
+
+class _MergesScreenState extends State<MergesScreen> {
+  @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      appBar: _ChatAppBar(),
+      appBar: _MergesAppBar(),
       body: Center(
-        child: Text('Unlimited chat will be added after Hi Requests.'),
+        child: Text('No active merges.'),
       ),
     );
   }
