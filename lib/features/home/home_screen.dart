@@ -163,8 +163,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Hi',
           ),
           NavigationDestination(
-            icon: Icon(Icons.chat_bubble_rounded),
-            label: 'Chat',
+            icon: Icon(Icons.auto_awesome_rounded),
+            label: 'Merges',
           ),
           NavigationDestination(
             icon: Icon(Icons.notifications_rounded),
