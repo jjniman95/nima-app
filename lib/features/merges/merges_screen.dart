@@ -19,12 +19,12 @@ class _MergesScreenState extends State<MergesScreen> {
   }
 }
 
-class _ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const _ChatAppBar();
+class _MergesAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const _MergesAppBar();
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(title: const Text('Chats'));
+    return AppBar(title: const Text('Merges'));
   }
 
   @override
