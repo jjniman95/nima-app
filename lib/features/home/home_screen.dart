@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/hi_request.dart';
 import '../../services/firebase_pulse_service.dart';
 import '../../services/pulse_service.dart';
-import '../chat/chats_screen.dart';
+import '../merges/merges_screen.dart';
 import '../hi_requests/hi_requests_screen.dart';
 import '../hi_requests/merging_pulses_screen.dart';
 import '../nearby/nearby_screen.dart';
@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final pages = const [
     NearbyScreen(),
     HiRequestsScreen(),
-    ChatsScreen(),
+    MergesScreen(),
     NotificationsScreen(),
     SettingsScreen(),
   ];
