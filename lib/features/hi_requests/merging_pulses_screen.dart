@@ -57,8 +57,9 @@ class _MergingPulsesScreenState extends State<MergingPulsesScreen> {
   Navigator.of(context).pushReplacement(
     MaterialPageRoute(
       builder: (_) => ConversationScreen(
-        pulseName: widget.otherPulseName,
-      ),
+  pulseName: widget.otherPulseName,
+  conversationId: widget.conversationId,
+),
     ),
   );
   }
