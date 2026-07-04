@@ -24,7 +24,7 @@ class NimaApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       themeAnimationDuration: Duration.zero,
       home: const SplashScreen(),
     );
