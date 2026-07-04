@@ -372,11 +372,18 @@ class _NearbyScreenState extends State<NearbyScreen> {
                                     final bio = (data['bio'] ?? '').toString();
 
                                     final angle =
-                                        (2 * math.pi / math.max(visibleCount, 1)) *
-                                                index -
-                                            math.pi / 2;
-                                    final radius = radarSize *
-                                        (0.24 + (index % 4) * 0.105);
+                                      (2 * math.pi / math.max(visibleCount, 1)) * index - math.pi / 2;
+
+                                  // Keep every avatar safely inside the radar on all phone sizes.
+                                    const avatarRadius = 26.0;
+                                    const screenPadding = 16.0;
+
+                                    final safeRadius =
+                                    (radarSize / 2) - avatarRadius - screenPadding;
+
+                                    final radius = safeRadius *
+                                    (0.45 + (index % 4) * 0.15);
+
                                     final x = math.cos(angle) * radius;
                                     final y = math.sin(angle) * radius;
                                     final active = selectedIndex == index;
