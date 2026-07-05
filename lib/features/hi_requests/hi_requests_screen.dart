@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/app_colors.dart';
-import '../../core/widgets/nima_app_bar.dart';
 import '../../models/hi_request.dart';
 import '../../services/firebase_pulse_service.dart';
 import '../../services/pulse_service.dart';
@@ -118,9 +117,6 @@ class _HiRequestsScreenState extends State<HiRequestsScreen> {
     final userId = localUserId;
 
     return Scaffold(
-      appBar: const NimaAppBar(
-        title: 'Hi Requests',
-      ),
       body: userId == null
           ? const Center(child: CircularProgressIndicator())
           : StreamBuilder<List<HiRequest>>(
