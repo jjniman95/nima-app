@@ -169,6 +169,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
     ),
   );
 },
+),                  
                 _MenuTile(
                   icon: Icons.support_agent_rounded,
                   title: 'Contact Us',
@@ -188,6 +189,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
     ),
   );
 },
+),                  
               ],
             ),
           ),
