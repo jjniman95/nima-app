@@ -1,3 +1,5 @@
+import '../profile/my_profile_screen.dart';
+import '../about/about_nima_screen.dart';
 import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -160,18 +162,13 @@ class _NearbyScreenState extends State<NearbyScreen> {
                   icon: Icons.person_rounded,
                   title: 'My Profile',
                   onTap: () {
-                    Navigator.pop(context);
-                    _showSnack('Profile will open here.');
-                  },
-                ),
-                _MenuTile(
-                  icon: Icons.settings_rounded,
-                  title: 'Settings',
-                  onTap: () {
-                    Navigator.pop(context);
-                    _showSnack('Settings will open here.');
-                  },
-                ),
+  Navigator.pop(context);
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) => const MyProfileScreen(),
+    ),
+  );
+},
                 _MenuTile(
                   icon: Icons.support_agent_rounded,
                   title: 'Contact Us',
@@ -184,10 +181,13 @@ class _NearbyScreenState extends State<NearbyScreen> {
                   icon: Icons.info_rounded,
                   title: 'About NIMA',
                   onTap: () {
-                    Navigator.pop(context);
-                    _showSnack('About NIMA will open here.');
-                  },
-                ),
+  Navigator.pop(context);
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) => const AboutNimaScreen(),
+    ),
+  );
+},
               ],
             ),
           ),
