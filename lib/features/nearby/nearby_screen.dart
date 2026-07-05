@@ -1,3 +1,4 @@
+import 'dart:io';
 import '../profile/my_profile_screen.dart';
 import '../about/about_nima_screen.dart';
 import 'dart:math' as math;
@@ -113,90 +114,108 @@ class _NearbyScreenState extends State<NearbyScreen> {
     );
   }
 
-  void _openProfileMenu() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Theme.of(context).brightness == Brightness.dark
-          ? AppColors.darkSurface
-          : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      builder: (_) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 44,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.35),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+  Future<void> _openProfileMenu() async {
+  final prefs = await SharedPreferences.getInstance();
+  final profileImagePath = prefs.getString('localProfileImagePath');
+
+  final hasPhoto = profileImagePath != null &&
+      profileImagePath.isNotEmpty &&
+      File(profileImagePath).existsSync();
+
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: Theme.of(context).brightness == Brightness.dark
+        ? AppColors.darkSurface
+        : Colors.white,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+    ),
+    builder: (_) {
+      return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 44,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.35),
+                  borderRadius: BorderRadius.circular(30),
                 ),
-                const SizedBox(height: 18),
-                Row(
-                  children: [
-                    NimaAvatar(
-                      nickname: localNickname,
-                      statusColor: Colors.greenAccent,
-                      size: 56,
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Text(
-                        localNickname,
-                        style: const TextStyle(
-                          fontSize: 21,
-                          fontWeight: FontWeight.w900,
-                        ),
+              ),
+              const SizedBox(height: 18),
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 28,
+                    backgroundColor: AppColors.royalPurple,
+                    backgroundImage:
+                        hasPhoto ? FileImage(File(profileImagePath)) : null,
+                    child: hasPhoto
+                        ? null
+                        : Text(
+                            localNickname.isNotEmpty
+                                ? localNickname[0].toUpperCase()
+                                : 'N',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 22,
+                            ),
+                          ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Text(
+                      localNickname,
+                      style: const TextStyle(
+                        fontSize: 21,
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 18),
-                _MenuTile(
-                  icon: Icons.person_rounded,
-                  title: 'My Profile',
-                  onTap: () {
-  Navigator.pop(context);
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (_) => const MyProfileScreen(),
-    ),
-  );
-},
-),                  
-                _MenuTile(
-                  icon: Icons.support_agent_rounded,
-                  title: 'Contact Us',
-                  onTap: () {
-                    Navigator.pop(context);
-                    _showSnack('Contact Us will open here.');
-                  },
-                ),
-                _MenuTile(
-                  icon: Icons.info_rounded,
-                  title: 'About NIMA',
-                  onTap: () {
-  Navigator.pop(context);
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (_) => const AboutNimaScreen(),
-    ),
-  );
-},
-),                  
-              ],
-            ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              _MenuTile(
+                icon: Icons.person_rounded,
+                title: 'My Profile',
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const MyProfileScreen(),
+                    ),
+                  );
+                },
+              ),
+              _MenuTile(
+                icon: Icons.support_agent_rounded,
+                title: 'Contact Us',
+                onTap: () {
+                  Navigator.pop(context);
+                  _showSnack('Contact Us will open here.');
+                },
+              ),
+              _MenuTile(
+                icon: Icons.info_rounded,
+                title: 'About NIMA',
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const AboutNimaScreen(),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
 
   void _showUserActions({
     required String userId,
