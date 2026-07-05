@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/app_colors.dart';
-import '../../core/widgets/nima_app_bar.dart';
 import '../conversation/conversation_screen.dart';
 
 class MergesScreen extends StatefulWidget {
@@ -111,9 +110,6 @@ class _MergesScreenState extends State<MergesScreen> {
     final userId = localUserId;
 
     return Scaffold(
-      appBar: const NimaAppBar(
-        title: 'Merges',
-      ),
       body: userId == null
           ? const Center(child: CircularProgressIndicator())
           : StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
