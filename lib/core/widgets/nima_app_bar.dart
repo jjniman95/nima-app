@@ -8,7 +8,7 @@ class NimaAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     this.subtitle,
     this.actions,
-    this.showBack = true,
+    this.showBack = false,
     this.onBack,
   });
 
