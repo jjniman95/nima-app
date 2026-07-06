@@ -125,7 +125,7 @@ class _MessageInputState extends State<MessageInput> {
                   subtitle: 'Request selected profile details',
                   onTap: () {
                     Navigator.pop(context);
-                    _showComingSoon('About Pulse request will be added next.');
+                    widget.onAboutPulse?.call();
                   },
                 ),
                 _ActionTile(
@@ -134,8 +134,7 @@ class _MessageInputState extends State<MessageInput> {
                   subtitle: 'Request connection beyond NIMA',
                   onTap: () {
                     Navigator.pop(context);
-                    _showComingSoon(
-                      'Social Involvement request will be added next.',
+                    widget.onSocialInvolvement?.call();
                     );
                   },
                 ),
