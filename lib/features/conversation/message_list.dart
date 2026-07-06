@@ -61,8 +61,12 @@ final Future<void> Function(PulseMessage message) onDeclineSocial;
             );
           },
           child: _MessageItem(
-            message: message,
-            mine: mine,
+  message: message,
+  mine: mine,
+  onAcceptAboutPulse: onAcceptAboutPulse,
+  onDeclineAboutPulse: onDeclineAboutPulse,
+  onAcceptSocial: onAcceptSocial,
+  onDeclineSocial: onDeclineSocial,
           ),
         );
       },
@@ -72,12 +76,22 @@ final Future<void> Function(PulseMessage message) onDeclineSocial;
 
 class _MessageItem extends StatelessWidget {
   const _MessageItem({
+    super.key,
     required this.message,
     required this.mine,
+    required this.onAcceptAboutPulse,
+    required this.onDeclineAboutPulse,
+    required this.onAcceptSocial,
+    required this.onDeclineSocial,
   });
 
   final PulseMessage message;
   final bool mine;
+
+  final Future<void> Function(PulseMessage message) onAcceptAboutPulse;
+  final Future<void> Function(PulseMessage message) onDeclineAboutPulse;
+  final Future<void> Function(PulseMessage message) onAcceptSocial;
+  final Future<void> Function(PulseMessage message) onDeclineSocial;
 
   @override
   Widget build(BuildContext context) {
