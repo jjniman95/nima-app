@@ -10,12 +10,20 @@ import '../../models/pulse_message.dart';
 
 class MessageList extends StatelessWidget {
   const MessageList({
-    super.key,
-    required this.controller,
-    required this.messages,
-    required this.currentPulseId,
-  });
+  super.key,
+  required this.controller,
+  required this.messages,
+  required this.currentPulseId,
+  required this.onAcceptAboutPulse,
+  required this.onDeclineAboutPulse,
+  required this.onAcceptSocial,
+  required this.onDeclineSocial,
+});
 
+  final Future<void> Function(PulseMessage message) onAcceptAboutPulse;
+final Future<void> Function(PulseMessage message) onDeclineAboutPulse;
+final Future<void> Function(PulseMessage message) onAcceptSocial;
+final Future<void> Function(PulseMessage message) onDeclineSocial;
   final ScrollController controller;
   final List<PulseMessage> messages;
   final String currentPulseId;
@@ -86,8 +94,8 @@ class _MessageItem extends StatelessWidget {
         return AboutPulseRequestCard(
           requesterName:
               (message.payload['requesterNickname'] ?? 'This Pulse').toString(),
-          onAccept: () {},
-          onDecline: () {},
+          onAccept: () => onAcceptAboutPulse(message),
+onDecline: () => onDeclineAboutPulse(message),
         );
 
       case PulseMessageType.aboutPulseShared:
@@ -103,8 +111,8 @@ class _MessageItem extends StatelessWidget {
         return SocialRequestCard(
           requesterName:
               (message.payload['requesterNickname'] ?? 'This Pulse').toString(),
-          onAccept: () {},
-          onDecline: () {},
+          onAccept: () => onAcceptSocial(message),
+onDecline: () => onDeclineSocial(message),
         );
 
       case PulseMessageType.socialShared:
