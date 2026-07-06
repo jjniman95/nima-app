@@ -80,7 +80,10 @@ final nickname = prefs.getString('localNickname') ?? 'NIMA User';
 
     if (!mounted) return;
 
-    setState(() => localUserId = id);
+    setState(() {
+  localUserId = id;
+  localNickname = nickname;
+});
 
     if (hasConversationId) {
       await pulseService.markSeen(
@@ -142,11 +145,12 @@ final nickname = prefs.getString('localNickname') ?? 'NIMA User';
       setState(() {
         localMessages.add(
           PulseMessage(
-            id: DateTime.now().millisecondsSinceEpoch.toString(),
-            senderId: senderId,
-            text: text,
-            sentAtLabel: 'Now',
-            seen: false,
+  id: DateTime.now().millisecondsSinceEpoch.toString(),
+  senderId: senderId,
+  type: PulseMessageType.text,
+  text: text,
+  sentAtLabel: 'Now',
+  seen: false,
           ),
         );
       });
