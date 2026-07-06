@@ -217,11 +217,72 @@ final nickname = prefs.getString('localNickname') ?? 'NIMA User';
       curve: Curves.easeOut,
     );
   }
-  
- Future<void> _acceptAboutPulse(PulseMessage message) async {}
- Future<void> _declineAboutPulse(PulseMessage message) async {}
- Future<void> _acceptSocial(PulseMessage message) async {}
- Future<void> _declineSocial(PulseMessage message) async {}
+
+  Future<void> _acceptAboutPulse(PulseMessage message) async {
+  if (!hasConversationId || localUserId == null) return;
+
+  final result = await Navigator.of(context).push<Map<String, dynamic>>(
+    MaterialPageRoute(
+      builder: (_) => const AboutPulseScreen(),
+    ),
+  );
+
+  if (result == null || result.isEmpty) return;
+
+  final service = pulseService as FirebasePulseService;
+
+  await service.sendAboutPulseShared(
+    conversationId: widget.conversationId!,
+    senderId: localUserId!,
+    senderNickname: localNickname,
+    sharedDetails: result,
+  );
+}
+
+Future<void> _declineAboutPulse(PulseMessage message) async {
+  if (!hasConversationId || localUserId == null) return;
+
+  final service = pulseService as FirebasePulseService;
+
+  await service.sendSystemMessage(
+    conversationId: widget.conversationId!,
+    senderId: localUserId!,
+    text: '$localNickname declined About Pulse request.',
+  );
+}
+
+Future<void> _acceptSocial(PulseMessage message) async {
+  if (!hasConversationId || localUserId == null) return;
+
+  final result = await Navigator.of(context).push<Map<String, dynamic>>(
+    MaterialPageRoute(
+      builder: (_) => const SocialInvolmentScreen(),
+    ),
+  );
+
+  if (result == null || result.isEmpty) return;
+
+  final service = pulseService as FirebasePulseService;
+
+  await service.sendSocialShared(
+    conversationId: widget.conversationId!,
+    senderId: localUserId!,
+    senderNickname: localNickname,
+    sharedSocials: result,
+  );
+}
+
+Future<void> _declineSocial(PulseMessage message) async {
+  if (!hasConversationId || localUserId == null) return;
+
+  final service = pulseService as FirebasePulseService;
+
+  await service.sendSystemMessage(
+    conversationId: widget.conversationId!,
+    senderId: localUserId!,
+    text: '$localNickname declined Connect Beyond NIMA request.',
+  );
+}
  
   @override
   Widget build(BuildContext context) {
