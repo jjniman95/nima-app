@@ -11,12 +11,17 @@ class MessageInput extends StatefulWidget {
     required this.enabled,
     required this.onSend,
     this.onTyping,
+    this.onAboutPulse,
+    this.onSocialInvolvement,
   });
 
   final bool enabled;
   final Future<void> Function(String text) onSend;
   final Future<void> Function()? onTyping;
 
+  final VoidCallback? onAboutPulse;
+  final VoidCallback? onSocialInvolvement;
+  
   @override
   State<MessageInput> createState() => _MessageInputState();
 }
