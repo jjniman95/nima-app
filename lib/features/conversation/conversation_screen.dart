@@ -301,6 +301,10 @@ final nickname = prefs.getString('localNickname') ?? 'NIMA User';
                           controller: scrollController,
                           messages: localMessages,
                           currentPulseId: userId,
+                        onAcceptAboutPulse: _acceptAboutPulse,
+onDeclineAboutPulse: _declineAboutPulse,
+onAcceptSocial: _acceptSocial,
+onDeclineSocial: _declineSocial,
                         ),
                 ),
                 MessageInput(
