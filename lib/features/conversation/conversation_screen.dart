@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'about_pulse_screen.dart';
+import '../profile/social_involment_screen.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/widgets/nima_app_bar.dart';
 import '../../models/pulse_message.dart';
@@ -45,6 +47,30 @@ class _ConversationScreenState extends State<ConversationScreen> {
     _startMergeTimer();
   }
 
+  Future<void> _requestAboutPulse() async {
+  if (!hasConversationId || localUserId == null) return;
+
+  final service = pulseService as FirebasePulseService;
+
+  await service.sendAboutPulseRequest(
+    conversationId: widget.conversationId!,
+    senderId: localUserId!,
+    senderNickname: widget.pulseName,
+  );
+}
+
+Future<void> _requestSocial() async {
+  if (!hasConversationId || localUserId == null) return;
+
+  final service = pulseService as FirebasePulseService;
+
+  await service.sendSocialRequest(
+    conversationId: widget.conversationId!,
+    senderId: localUserId!,
+    senderNickname: widget.pulseName,
+  );
+}
+  
   Future<void> _loadLocalUser() async {
     final prefs = await SharedPreferences.getInstance();
     var id = prefs.getString('localUserId');
@@ -276,10 +302,12 @@ class _ConversationScreenState extends State<ConversationScreen> {
                         ),
                 ),
                 MessageInput(
-                  enabled: remaining.inSeconds > 0,
-                  onSend: _sendMessage,
-                  onTyping: _handleTyping,
-                ),
+  enabled: remaining.inSeconds > 0,
+  onSend: _sendMessage,
+  onTyping: _handleTyping,
+  onAboutPulse: _requestAboutPulse,
+  onSocialInvolvement: _requestSocial,
+),
               ],
             ),
     );
