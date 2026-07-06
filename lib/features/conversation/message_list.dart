@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../core/widgets/about_pulse_request_card.dart';
+import '../../core/widgets/about_pulse_shared_card.dart';
 import '../../core/widgets/nima_message_bubble.dart';
+import '../../core/widgets/social_request_card.dart';
+import '../../core/widgets/social_shared_card.dart';
+import '../../core/widgets/system_message_card.dart';
 import '../../models/pulse_message.dart';
 
 class MessageList extends StatelessWidget {
@@ -47,14 +52,74 @@ class MessageList extends StatelessWidget {
               ),
             );
           },
-          child: NimaMessageBubble(
-            text: message.text,
+          child: _MessageItem(
+            message: message,
             mine: mine,
-            time: message.sentAtLabel.isEmpty ? 'Now' : message.sentAtLabel,
-            seen: message.seen,
           ),
         );
       },
     );
+  }
+}
+
+class _MessageItem extends StatelessWidget {
+  const _MessageItem({
+    required this.message,
+    required this.mine,
+  });
+
+  final PulseMessage message;
+  final bool mine;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (message.type) {
+      case PulseMessageType.text:
+        return NimaMessageBubble(
+          text: message.text,
+          mine: mine,
+          time: message.sentAtLabel.isEmpty ? 'Now' : message.sentAtLabel,
+          seen: message.seen,
+        );
+
+      case PulseMessageType.aboutPulseRequest:
+        return AboutPulseRequestCard(
+          requesterName:
+              (message.payload['requesterNickname'] ?? 'This Pulse').toString(),
+          onAccept: () {},
+          onDecline: () {},
+        );
+
+      case PulseMessageType.aboutPulseShared:
+        return AboutPulseSharedCard(
+          sharerName:
+              (message.payload['sharerNickname'] ?? 'This Pulse').toString(),
+          details: Map<String, dynamic>.from(
+            message.payload['details'] ?? {},
+          ),
+        );
+
+      case PulseMessageType.socialRequest:
+        return SocialRequestCard(
+          requesterName:
+              (message.payload['requesterNickname'] ?? 'This Pulse').toString(),
+          onAccept: () {},
+          onDecline: () {},
+        );
+
+      case PulseMessageType.socialShared:
+        return SocialSharedCard(
+          sharerName:
+              (message.payload['sharerNickname'] ?? 'This Pulse').toString(),
+          socials: Map<String, dynamic>.from(
+            message.payload['socials'] ?? {},
+          ),
+        );
+
+      case PulseMessageType.system:
+        return SystemMessageCard(
+          text: message.text,
+        );
+    }
   }
 }
