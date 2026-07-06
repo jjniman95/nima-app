@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'social_involment_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -463,7 +464,24 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   onChanged: (value) => setState(() => ghostMode = value),
                 ),
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 16),
+
+SizedBox(
+  width: double.infinity,
+  height: 52,
+  child: OutlinedButton.icon(
+    onPressed: () {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => const SocialInvolvementScreen(),
+        ),
+      );
+    },
+    icon: const Icon(Icons.public_rounded),
+    label: const Text('Connect Beyond NIMA'),
+  ),
+),
+              const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 height: 54,
