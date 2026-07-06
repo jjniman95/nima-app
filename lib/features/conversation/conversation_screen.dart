@@ -55,9 +55,9 @@ class _ConversationScreenState extends State<ConversationScreen> {
   await service.sendAboutPulseRequest(
     conversationId: widget.conversationId!,
     senderId: localUserId!,
-    senderNickname: widget.pulseName,
+    senderNickname: localNickname,
   );
-}
+  }
 
 Future<void> _requestSocial() async {
   if (!hasConversationId || localUserId == null) return;
@@ -67,7 +67,7 @@ Future<void> _requestSocial() async {
   await service.sendSocialRequest(
     conversationId: widget.conversationId!,
     senderId: localUserId!,
-    senderNickname: widget.pulseName,
+    senderNickname: localNickname,
   );
 }
   
