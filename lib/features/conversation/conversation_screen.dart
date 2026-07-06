@@ -217,7 +217,12 @@ final nickname = prefs.getString('localNickname') ?? 'NIMA User';
       curve: Curves.easeOut,
     );
   }
-
+  
+ Future<void> _acceptAboutPulse(PulseMessage message) async {}
+ Future<void> _declineAboutPulse(PulseMessage message) async {}
+ Future<void> _acceptSocial(PulseMessage message) async {}
+ Future<void> _declineSocial(PulseMessage message) async {}
+ 
   @override
   Widget build(BuildContext context) {
     final userId = localUserId;
@@ -291,10 +296,14 @@ final nickname = prefs.getString('localNickname') ?? 'NIMA User';
                             }
 
                             return MessageList(
-                              controller: scrollController,
-                              messages: messages,
-                              currentPulseId: userId,
-                            );
+  controller: scrollController,
+  messages: messages,
+  currentPulseId: userId,
+  onAcceptAboutPulse: _acceptAboutPulse,
+  onDeclineAboutPulse: _declineAboutPulse,
+  onAcceptSocial: _acceptSocial,
+  onDeclineSocial: _declineSocial,
+);
                           },
                         )
                       : MessageList(
