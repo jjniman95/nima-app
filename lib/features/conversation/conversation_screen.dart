@@ -33,6 +33,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   final ScrollController scrollController = ScrollController();
 
   String? localUserId;
+  String localNickname = 'NIMA User';
   Duration remaining = MergeService.mergeDuration;
   StreamSubscription<Duration>? timerSubscription;
   final List<PulseMessage> localMessages = [];
@@ -73,12 +74,9 @@ Future<void> _requestSocial() async {
   
   Future<void> _loadLocalUser() async {
     final prefs = await SharedPreferences.getInstance();
-    var id = prefs.getString('localUserId');
 
-    if (id == null || id.isEmpty) {
-      id = 'local_${DateTime.now().millisecondsSinceEpoch}';
-      await prefs.setString('localUserId', id);
-    }
+var id = prefs.getString('localUserId');
+final nickname = prefs.getString('localNickname') ?? 'NIMA User';
 
     if (!mounted) return;
 
