@@ -188,7 +188,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     await prefs.setString('localProfileThumbBase64', profileThumbBase64);
     await prefs.setString('localAge', ageController.text.trim());
     await prefs.setString('localGender', selectedGender ?? '',);
-    await prefs.setString('localInterests', selectedInterests.join(','),);
+    await prefs.setStringlist('localInterests', selectedInterests.join(','),);
     
     if (!mounted) return;
 
