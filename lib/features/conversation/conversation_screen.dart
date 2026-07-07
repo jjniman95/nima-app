@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'about_pulse_screen.dart';
-import '../profile/social_involment_screen.dart';
+import '../profile/social_involvement_screen.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/widgets/nima_app_bar.dart';
 import '../../models/pulse_message.dart';
