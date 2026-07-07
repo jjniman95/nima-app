@@ -457,49 +457,49 @@ class _EditingContent extends StatelessWidget {
           controller: telegramController,
           label: 'Telegram',
           hint: 'Username',
-          icon: FontAwesomeIcons.telegram,
-        ),
+          const NimaSvgIcon(name: 'telegram')
+          ),
         _SocialField(
           controller: instagramController,
           label: 'Instagram',
           hint: 'Username',
-          icon: FontAwesomeIcons.instagram,
+          const NimaSvgIcon(name: 'instagram')
         ),
         _SocialField(
           controller: facebookController,
           label: 'Facebook',
           hint: 'Profile name or username',
-          icon: FontAwesomeIcons.facebook,
+          const NimaSvgIcon(name: 'facebook')
         ),
         _SocialField(
           controller: snapchatController,
           label: 'Snapchat',
           hint: 'Username',
-          icon: FontAwesomeIcons.snapchat,
+          const NimaSvgIcon(name: 'snapchat')
         ),
         _SocialField(
           controller: tiktokController,
           label: 'TikTok',
           hint: 'Username',
-          icon: FontAwesomeIcons.tiktok,
+          const NimaSvgIcon(name: 'tiktok')
         ),
         _SocialField(
           controller: xController,
           label: 'X (Twitter)',
           hint: 'Username',
-          icon: FontAwesomeIcons.xTwitter,
+          const NimaSvgIcon(name: 'xtwitter')
         ),
         _SocialField(
           controller: linkedinController,
           label: 'LinkedIn',
           hint: 'Public profile username',
-          icon: FontAwesomeIcons.linkedin,
+          const NimaSvgIcon(name: 'linkedin')
         ),
         _SocialField(
           controller: emailController,
           label: 'Email',
           hint: 'Email address',
-          icon: FontAwesomeIcons.envelope,
+          const NimaSvgIcon(name: 'email')
           keyboardType: TextInputType.emailAddress,
         ),
       ],
