@@ -256,7 +256,9 @@ Future<void> _acceptSocial(PulseMessage message) async {
 
   final result = await Navigator.of(context).push<Map<String, dynamic>>(
     MaterialPageRoute(
-      builder: (_) => const SocialInvolvementScreen(),
+      builder: (_) => const SocialInvolvementScreen(
+  sharingMode: true,
+),
     ),
   );
 
