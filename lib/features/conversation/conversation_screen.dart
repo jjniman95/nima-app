@@ -75,7 +75,11 @@ Future<void> _requestSocial() async {
   Future<void> _loadLocalUser() async {
     final prefs = await SharedPreferences.getInstance();
 
-var id = prefs.getString('localUserId');
+   var id = prefs.getString('localUserId');
+    if (id == null || id.isEmpty) {
+  id = 'local_${DateTime.now().millisecondsSinceEpoch}';
+  await prefs.setString('localUserId', id);
+    }
 final nickname = prefs.getString('localNickname') ?? 'NIMA User';
 
     if (!mounted) return;
