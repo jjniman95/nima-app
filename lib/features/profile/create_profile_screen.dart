@@ -23,7 +23,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
   String? profileImagePath;
 
-  int age = 25;
+  int age = 20;
   String gender = 'Prefer not to say';
 
   final interests = [
