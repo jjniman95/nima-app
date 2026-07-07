@@ -186,7 +186,10 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     await prefs.setString('localBio', bio);
     await prefs.setString('localProfileImagePath', profileImagePath!);
     await prefs.setString('localProfileThumbBase64', profileThumbBase64);
-
+    await prefs.setString('localAge', ageController.text.trim());
+    await prefs.setString('localGender', selectedGender ?? '',);
+    await prefs.setString('localInterests', selectedInterests.join(','),);
+    
     if (!mounted) return;
 
     Navigator.of(context).push(
