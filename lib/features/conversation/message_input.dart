@@ -135,7 +135,6 @@ class _MessageInputState extends State<MessageInput> {
                   onTap: () {
                     Navigator.pop(context);
                     widget.onSocialInvolvement?.call();
-                    );
                   },
                 ),
               ],
