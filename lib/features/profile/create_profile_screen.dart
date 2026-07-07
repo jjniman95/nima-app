@@ -183,12 +183,16 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     }, SetOptions(merge: true));
 
     await prefs.setString('localNickname', nickname);
-    await prefs.setString('localBio', bio);
-    await prefs.setString('localProfileImagePath', profileImagePath!);
-    await prefs.setString('localProfileThumbBase64', profileThumbBase64);
-    await prefs.setString('localAge', age.toString());
-    await prefs.setString('localGender', gender);
-    await prefs.setStringList('localInterests',selected.toList(),);
+await prefs.setString('localBio', bio);
+await prefs.setString('localProfileImagePath', profileImagePath!);
+await prefs.setString('localProfileThumbBase64', profileThumbBase64);
+
+await prefs.setString('localAge', age.toString());
+await prefs.setString('localGender', gender);
+await prefs.setStringList(
+  'localInterests',
+  selected.toList(),
+);
     
     if (!mounted) return;
 
