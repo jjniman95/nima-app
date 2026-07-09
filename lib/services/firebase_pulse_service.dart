@@ -36,27 +36,53 @@ class FirebasePulseService implements PulseService {
     });
   }
 
-  @override
-  Future<void> sendHi({
-    required String senderId,
-    required String senderNickname,
-    required String receiverId,
-    required String receiverNickname,
-  }) async {
-    final now = Timestamp.now();
+@override
+Future<void> sendHi({
+  required String senderId,
+  required String senderNickname,
+  required String receiverId,
+  required String receiverNickname,
+}) async {
+  final now = Timestamp.now();
+  final pairIds = [senderId, receiverId]..sort();
+  final pairKey = '${pairIds[0]}_${pairIds[1]}';
 
-    await _db.collection('hi_requests').add({
-      'senderId': senderId,
-      'senderNickname': senderNickname,
-      'receiverId': receiverId,
-      'receiverNickname': receiverNickname,
-      'status': 'pending',
-      'createdAt': now,
-      'expiresAt': Timestamp.fromDate(DateTime.now().add(mergeDuration)),
-      'nearbyOnly': true,
-      'requiresReacceptAfterMinutes': 10,
-    });
+  final oldRequests = await _db
+      .collection('hi_requests')
+      .where('pairKey', isEqualTo: pairKey)
+      .get();
+
+  final batch = _db.batch();
+
+  for (final doc in oldRequests.docs) {
+    batch.delete(doc.reference);
   }
+
+  final newRequestRef = _db.collection('hi_requests').doc();
+
+  batch.set(newRequestRef, {
+    'pairKey': pairKey,
+    'senderId': senderId,
+    'senderNickname': senderNickname,
+    'receiverId': receiverId,
+    'receiverNickname': receiverNickname,
+    'status': 'pending',
+    'createdAt': now,
+    'popupExpiresAt': Timestamp.fromDate(
+      DateTime.now().add(const Duration(minutes: 1)),
+    ),
+    'missedAt': Timestamp.fromDate(
+      DateTime.now().add(const Duration(minutes: 2)),
+    ),
+    'expiresAt': Timestamp.fromDate(
+      DateTime.now().add(const Duration(minutes: 10)),
+    ),
+    'nearbyOnly': true,
+    'requiresReacceptAfterMinutes': 10,
+  });
+
+  await batch.commit();
+}
 
   @override
   Future<String> acceptHi({
