@@ -105,12 +105,21 @@ class _MessageItem extends StatelessWidget {
         );
 
       case PulseMessageType.aboutPulseRequest:
-        return AboutPulseRequestCard(
-          requesterName:
-              (message.payload['requesterNickname'] ?? 'This Pulse').toString(),
-          onAccept: () => onAcceptAboutPulse(message),
-onDecline: () => onDeclineAboutPulse(message),
-        );
+  if (mine) {
+    return NimaMessageBubble(
+      text: 'About Pulse request sent',
+      mine: true,
+      time: message.sentAtLabel.isEmpty ? 'Now' : message.sentAtLabel,
+      seen: message.seen,
+    );
+  }
+
+  return AboutPulseRequestCard(
+    requesterName:
+        (message.payload['requesterNickname'] ?? 'This Pulse').toString(),
+    onAccept: () => onAcceptAboutPulse(message),
+    onDecline: () => onDeclineAboutPulse(message),
+  );
 
       case PulseMessageType.aboutPulseShared:
         return AboutPulseSharedCard(
@@ -122,12 +131,21 @@ onDecline: () => onDeclineAboutPulse(message),
         );
 
       case PulseMessageType.socialRequest:
-        return SocialRequestCard(
-          requesterName:
-              (message.payload['requesterNickname'] ?? 'This Pulse').toString(),
-          onAccept: () => onAcceptSocial(message),
-onDecline: () => onDeclineSocial(message),
-        );
+  if (mine) {
+    return NimaMessageBubble(
+      text: 'Connect Beyond NIMA request sent',
+      mine: true,
+      time: message.sentAtLabel.isEmpty ? 'Now' : message.sentAtLabel,
+      seen: message.seen,
+    );
+  }
+
+  return SocialRequestCard(
+    requesterName:
+        (message.payload['requesterNickname'] ?? 'This Pulse').toString(),
+    onAccept: () => onAcceptSocial(message),
+    onDecline: () => onDeclineSocial(message),
+  );
 
       case PulseMessageType.socialShared:
         return SocialSharedCard(
