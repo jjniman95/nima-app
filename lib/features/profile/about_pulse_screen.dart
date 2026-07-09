@@ -160,24 +160,29 @@ class _AboutPulseScreenState extends State<AboutPulseScreen> {
       if (!_hasValue(key)) continue;
 
       switch (key) {
-        case 'profilePicture':
-          selectedDetails['Profile Picture'] = profileThumbBase64;
-          break;
-        case 'nickname':
-          selectedDetails['Nickname'] = nickname;
-          break;
-        case 'bio':
-          selectedDetails['Bio'] = bio;
-          break;
-        case 'age':
-          selectedDetails['Age'] = age;
-          break;
-        case 'gender':
-          selectedDetails['Gender'] = gender;
-          break;
-        case 'interests':
-          selectedDetails['Interests'] = interests;
-          break;
+  case 'profilePicture':
+    selectedDetails['profilePicture'] = profileThumbBase64;
+    break;
+
+  case 'nickname':
+    selectedDetails['nickname'] = nickname;
+    break;
+
+  case 'bio':
+    selectedDetails['bio'] = bio;
+    break;
+
+  case 'age':
+    selectedDetails['age'] = age;
+    break;
+
+  case 'gender':
+    selectedDetails['gender'] = gender;
+    break;
+
+  case 'interests':
+    selectedDetails['interests'] = interests;
+    break;
       }
     }
 
