@@ -145,8 +145,8 @@ class _SocialInvolvementScreenState extends State<SocialInvolvementScreen> {
     for (final key in selectedKeys) {
       final value = currentSocials[key];
       if (value != null && value.trim().isNotEmpty) {
-        selectedSocials[_displayName(key)] = value.trim();
-      }
+        selectedSocials[key] = value.trim();
+    }
     }
 
     if (selectedSocials.isEmpty) {
