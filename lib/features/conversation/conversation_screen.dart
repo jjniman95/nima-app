@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../nearby/nearby_screen.dart';
 import '../profile/about_pulse_screen.dart';
 import '../profile/social_involvement_screen.dart';
 import '../../core/constants/app_colors.dart';
@@ -118,8 +119,12 @@ final nickname = prefs.getString('localNickname') ?? 'NIMA User';
       const SnackBar(content: Text('Merge Expired')),
     );
 
-    Navigator.of(context).popUntil((route) => route.isFirst);
-  }
+    Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(
+    builder: (_) => const NearbyScreen(),
+  ),
+  (route) => false,
+);
 
   @override
   void dispose() {
@@ -209,8 +214,12 @@ final nickname = prefs.getString('localNickname') ?? 'NIMA User';
 
     if (!mounted) return;
 
-    Navigator.of(context).popUntil((route) => route.isFirst);
-  }
+    Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(
+    builder: (_) => const NearbyScreen(),
+  ),
+  (route) => false,
+);
 
   void _scrollToBottom() {
     if (!scrollController.hasClients) return;
