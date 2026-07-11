@@ -231,27 +231,38 @@ final nickname = prefs.getString('localNickname') ?? 'NIMA User';
     ),
   );
 
+  // User pressed Back or shared nothing.
+  // Keep the request pending.
   if (result == null || result.isEmpty) return;
 
   final service = pulseService as FirebasePulseService;
 
+  // First send the shared profile details.
   await service.sendAboutPulseShared(
     conversationId: widget.conversationId!,
     senderId: localUserId!,
     senderNickname: localNickname,
     sharedDetails: result,
   );
+
+  // Then mark the original request as accepted.
+  // MessageList will hide that request card.
+  await service.updateRequestMessageStatus(
+    conversationId: widget.conversationId!,
+    messageId: message.id,
+    status: 'accepted',
+  );
 }
 
 Future<void> _declineAboutPulse(PulseMessage message) async {
-  if (!hasConversationId || localUserId == null) return;
+  if (!hasConversationId) return;
 
   final service = pulseService as FirebasePulseService;
 
-  await service.sendSystemMessage(
+  await service.updateRequestMessageStatus(
     conversationId: widget.conversationId!,
-    senderId: localUserId!,
-    text: '$localNickname declined About Pulse request.',
+    messageId: message.id,
+    status: 'declined',
   );
 }
 
@@ -261,32 +272,42 @@ Future<void> _acceptSocial(PulseMessage message) async {
   final result = await Navigator.of(context).push<Map<String, dynamic>>(
     MaterialPageRoute(
       builder: (_) => const SocialInvolvementScreen(
-  sharingMode: true,
-),
+        sharingMode: true,
+      ),
     ),
   );
 
+  // User pressed Back or shared nothing.
+  // Keep the request pending.
   if (result == null || result.isEmpty) return;
 
   final service = pulseService as FirebasePulseService;
 
+  // First send the selected social details.
   await service.sendSocialShared(
     conversationId: widget.conversationId!,
     senderId: localUserId!,
     senderNickname: localNickname,
     sharedSocials: result,
   );
+
+  // Then mark the original request as accepted.
+  await service.updateRequestMessageStatus(
+    conversationId: widget.conversationId!,
+    messageId: message.id,
+    status: 'accepted',
+  );
 }
 
 Future<void> _declineSocial(PulseMessage message) async {
-  if (!hasConversationId || localUserId == null) return;
+  if (!hasConversationId) return;
 
   final service = pulseService as FirebasePulseService;
 
-  await service.sendSystemMessage(
+  await service.updateRequestMessageStatus(
     conversationId: widget.conversationId!,
-    senderId: localUserId!,
-    text: '$localNickname declined Connect Beyond NIMA request.',
+    messageId: message.id,
+    status: 'declined',
   );
 }
  
