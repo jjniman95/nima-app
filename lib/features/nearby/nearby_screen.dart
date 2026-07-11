@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../services/firebase_pulse_service.dart';
+import '../../services/pulse_service.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/widgets/nima_avatar.dart';
@@ -21,6 +23,10 @@ class _NearbyScreenState extends State<NearbyScreen> {
   String? localUserId;
   String localNickname = 'NIMA User';
   String? localProfileThumbBase64;
+
+  final PulseService pulseService = FirebasePulseService.instance;
+
+  final Set<String> sendingHiTo = {};
 
   @override
   void initState() {
@@ -66,46 +72,49 @@ class _NearbyScreenState extends State<NearbyScreen> {
   }
 
   Future<void> _sendHi({
-    required String receiverId,
-    required String receiverNickname,
-  }) async {
-    final senderId = localUserId;
+  required String receiverId,
+  required String receiverNickname,
+}) async {
+  final senderId = localUserId;
 
-    if (senderId == null || senderId.isEmpty) {
-      _showSnack('Please create your profile first.');
-      return;
-    }
+  if (senderId == null || senderId.isEmpty) {
+    _showSnack('Please create your profile first.');
+    return;
+  }
 
-    if (senderId == receiverId) {
-      _showSnack('This is your own profile.');
-      return;
-    }
+  if (senderId == receiverId) {
+    _showSnack('This is your own profile.');
+    return;
+  }
 
-    final now = Timestamp.now();
-    final expiresAt = Timestamp.fromDate(
-      DateTime.now().add(const Duration(minutes: 10)),
+  // Prevent rapid repeated taps while the first request is sending.
+  if (sendingHiTo.contains(receiverId)) return;
+
+  setState(() {
+    sendingHiTo.add(receiverId);
+  });
+
+  try {
+    await pulseService.sendHi(
+      senderId: senderId,
+      senderNickname: localNickname,
+      receiverId: receiverId,
+      receiverNickname: receiverNickname,
     );
 
-    try {
-      await FirebaseFirestore.instance.collection('hi_requests').add({
-        'senderId': senderId,
-        'senderNickname': localNickname,
-        'receiverId': receiverId,
-        'receiverNickname': receiverNickname,
-        'status': 'pending',
-        'createdAt': now,
-        'expiresAt': expiresAt,
-        'lastActivityAt': now,
-        'nearbyOnly': true,
-        'requiresReacceptAfterMinutes': 10,
-      });
+    if (!mounted) return;
 
-      if (!mounted) return;
-      Navigator.pop(context);
-      _showSnack('Hi sent to $receiverNickname 👋');
-    } catch (e) {
-      _showSnack('Could not send Hi. Please try again.');
+    Navigator.pop(context);
+    _showSnack('Hi sent to $receiverNickname 👋');
+  } catch (_) {
+    _showSnack('Could not send Hi. Please try again.');
+  } finally {
+    if (mounted) {
+      setState(() {
+        sendingHiTo.remove(receiverId);
+      });
     }
+  }
   }
 
   void _showSnack(String message) {
