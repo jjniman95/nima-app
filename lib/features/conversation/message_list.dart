@@ -105,18 +105,34 @@ class _MessageItem extends StatelessWidget {
         );
 
       case PulseMessageType.aboutPulseRequest:
+  final status =
+      (message.payload['status'] ?? 'pending').toString();
+
+  if (status == 'accepted') {
+    return const SizedBox.shrink();
+  }
+
+  if (status == 'declined') {
+    return const SystemMessageCard(
+      text: 'About Pulse request declined.',
+    );
+  }
+
   if (mine) {
     return NimaMessageBubble(
       text: 'About Pulse request sent',
       mine: true,
-      time: message.sentAtLabel.isEmpty ? 'Now' : message.sentAtLabel,
+      time: message.sentAtLabel.isEmpty
+          ? 'Now'
+          : message.sentAtLabel,
       seen: message.seen,
     );
   }
 
   return AboutPulseRequestCard(
     requesterName:
-        (message.payload['requesterNickname'] ?? 'This Pulse').toString(),
+        (message.payload['requesterNickname'] ?? 'This Pulse')
+            .toString(),
     onAccept: () => onAcceptAboutPulse(message),
     onDecline: () => onDeclineAboutPulse(message),
   );
