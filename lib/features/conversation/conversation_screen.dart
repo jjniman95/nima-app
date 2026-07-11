@@ -221,7 +221,7 @@ final nickname = prefs.getString('localNickname') ?? 'NIMA User';
   ),
   (route) => false,
 );
-
+  }
   void _scrollToBottom() {
     if (!scrollController.hasClients) return;
 
