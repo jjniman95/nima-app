@@ -125,6 +125,7 @@ final nickname = prefs.getString('localNickname') ?? 'NIMA User';
   ),
   (route) => false,
 );
+  }
 
   @override
   void dispose() {
