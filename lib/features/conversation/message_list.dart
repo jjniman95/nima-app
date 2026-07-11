@@ -147,18 +147,34 @@ class _MessageItem extends StatelessWidget {
         );
 
       case PulseMessageType.socialRequest:
+  final status =
+      (message.payload['status'] ?? 'pending').toString();
+
+  if (status == 'accepted') {
+    return const SizedBox.shrink();
+  }
+
+  if (status == 'declined') {
+    return const SystemMessageCard(
+      text: 'Connect Beyond NIMA request declined.',
+    );
+  }
+
   if (mine) {
     return NimaMessageBubble(
       text: 'Connect Beyond NIMA request sent',
       mine: true,
-      time: message.sentAtLabel.isEmpty ? 'Now' : message.sentAtLabel,
+      time: message.sentAtLabel.isEmpty
+          ? 'Now'
+          : message.sentAtLabel,
       seen: message.seen,
     );
   }
 
   return SocialRequestCard(
     requesterName:
-        (message.payload['requesterNickname'] ?? 'This Pulse').toString(),
+        (message.payload['requesterNickname'] ?? 'This Pulse')
+            .toString(),
     onAccept: () => onAcceptSocial(message),
     onDecline: () => onDeclineSocial(message),
   );
