@@ -22,18 +22,41 @@ class FirebasePulseService implements PulseService {
   @override
   Stream<List<HiRequest>> streamHiRequests(String pulseId) {
     return _db
-        .collection('hi_requests')
-        .orderBy('createdAt', descending: true)
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs
-          .where((doc) {
-            final data = doc.data();
-            return data['senderId'] == pulseId || data['receiverId'] == pulseId;
-          })
-          .map((doc) => HiRequest.fromMap(doc.id, doc.data()))
-          .toList();
-    });
+    .collection('hi_requests')
+    .orderBy('createdAt', descending: true)
+    .snapshots()
+    .map((snapshot) {
+  final seenPairs = <String>{};
+  final requests = <HiRequest>[];
+
+  for (final doc in snapshot.docs) {
+    final data = doc.data();
+
+    if (data['senderId'] != pulseId &&
+        data['receiverId'] != pulseId) {
+      continue;
+    }
+
+    final sender = data['senderId'] as String;
+    final receiver = data['receiverId'] as String;
+
+    final ids = [sender, receiver]..sort();
+    final pairKey = '${ids[0]}_${ids[1]}';
+
+    // Already showing this pair?
+    if (seenPairs.contains(pairKey)) {
+      continue;
+    }
+
+    seenPairs.add(pairKey);
+
+    requests.add(
+      HiRequest.fromMap(doc.id, data),
+    );
+  }
+
+  return requests;
+});
   }
 
 @override
@@ -43,22 +66,39 @@ Future<void> sendHi({
   required String receiverId,
   required String receiverNickname,
 }) async {
-  final now = Timestamp.now();
+  final now = DateTime.now();
   final pairIds = [senderId, receiverId]..sort();
   final pairKey = '${pairIds[0]}_${pairIds[1]}';
 
-  final oldRequests = await _db
-      .collection('hi_requests')
-      .where('pairKey', isEqualTo: pairKey)
-      .get();
+  final requestsRef = _db.collection('hi_requests');
 
+  // Find old requests in both directions, including older documents
+  // created before pairKey was introduced.
+  final results = await Future.wait([
+    requestsRef
+        .where('senderId', isEqualTo: senderId)
+        .where('receiverId', isEqualTo: receiverId)
+        .get(),
+    requestsRef
+        .where('senderId', isEqualTo: receiverId)
+        .where('receiverId', isEqualTo: senderId)
+        .get(),
+  ]);
+
+  // A fixed document ID guarantees one stored request per Pulse pair.
+  final newRequestRef = requestsRef.doc(pairKey);
   final batch = _db.batch();
 
-  for (final doc in oldRequests.docs) {
-    batch.delete(doc.reference);
-  }
+  final oldReferences = {
+    for (final result in results)
+      for (final document in result.docs) document.reference,
+  };
 
-  final newRequestRef = _db.collection('hi_requests').doc();
+  for (final reference in oldReferences) {
+    if (reference.path != newRequestRef.path) {
+      batch.delete(reference);
+    }
+  }
 
   batch.set(newRequestRef, {
     'pairKey': pairKey,
@@ -67,18 +107,20 @@ Future<void> sendHi({
     'receiverId': receiverId,
     'receiverNickname': receiverNickname,
     'status': 'pending',
-    'createdAt': now,
+    'createdAt': Timestamp.fromDate(now),
     'popupExpiresAt': Timestamp.fromDate(
-      DateTime.now().add(const Duration(minutes: 1)),
+      now.add(const Duration(minutes: 1)),
     ),
     'missedAt': Timestamp.fromDate(
-      DateTime.now().add(const Duration(minutes: 2)),
+      now.add(const Duration(minutes: 2)),
     ),
     'expiresAt': Timestamp.fromDate(
-      DateTime.now().add(const Duration(minutes: 10)),
+      now.add(const Duration(minutes: 10)),
     ),
     'nearbyOnly': true,
     'requiresReacceptAfterMinutes': 10,
+    'conversationId': null,
+    'updatedAt': FieldValue.serverTimestamp(),
   });
 
   await batch.commit();
