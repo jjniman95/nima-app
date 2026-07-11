@@ -169,7 +169,23 @@ Future<void> sendHi({
     });
   }
 
-  @override
+@override
+Future<void> updateRequestMessageStatus({
+  required String conversationId,
+  required String messageId,
+  required String status,
+}) async {
+  await _db
+      .collection('conversations')
+      .doc(conversationId)
+      .collection('messages')
+      .doc(messageId)
+      .update({
+    'payload.status': status,
+    'updatedAt': FieldValue.serverTimestamp(),
+  });
+}
+  
   Future<void> sendMessage({
     required String conversationId,
     required String senderId,
@@ -189,7 +205,7 @@ Future<void> sendHi({
   }) async {
     final trimmed = text.trim();
     if (trimmed.isEmpty) return;
-
+    
     await _sendTypedMessage(
       conversationId: conversationId,
       senderId: senderId,
