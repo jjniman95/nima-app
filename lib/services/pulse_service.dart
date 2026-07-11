@@ -60,6 +60,12 @@ abstract class PulseService {
     required String senderNickname,
   });
 
+  Future<void> updateRequestMessageStatus({
+  required String conversationId,
+  required String messageId,
+  required String status,
+  });
+  
   Future<void> sendSocialShared({
     required String conversationId,
     required String senderId,
