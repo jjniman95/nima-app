@@ -45,9 +45,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   @override
   void initState() {
-    super.initState();
-    _loadLocalUser();
-    _startMergeTimer();
+  super.initState();
+  _loadLocalUser();
+  _startMergeTimer();
+  _startConversationWatcher();
+}
   }
 
   Future<void> _requestAboutPulse() async {
@@ -122,7 +124,20 @@ final nickname = prefs.getString('localNickname') ?? 'NIMA User';
     }
   });
   }
-  
+
+  Future<void> _onMergeClosedRemotely() async {
+  MergeService.instance.stop();
+
+  if (!mounted) return;
+
+  Navigator.of(context).pushAndRemoveUntil(
+    MaterialPageRoute(
+      builder: (_) => const NearbyScreen(),
+    ),
+    (route) => false,
+  );
+  }
+
   Future<void> _handleMergeExpired() async {
     if (hasConversationId) {
       await pulseService.expireMerge(conversationId: widget.conversationId!);
@@ -144,6 +159,7 @@ final nickname = prefs.getString('localNickname') ?? 'NIMA User';
 
   @override
   void dispose() {
+    conversationWatcher?.cancel();
     timerSubscription?.cancel();
     MergeService.instance.stop();
     scrollController.dispose();
