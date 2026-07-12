@@ -37,6 +37,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   String localNickname = 'NIMA User';
   Duration remaining = MergeService.mergeDuration;
   StreamSubscription<Duration>? timerSubscription;
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? conversationWatcher;
   final List<PulseMessage> localMessages = [];
 
   bool get hasConversationId =>
@@ -108,6 +109,20 @@ final nickname = prefs.getString('localNickname') ?? 'NIMA User';
     });
   }
 
+  void _startConversationWatcher() {
+  if (!hasConversationId) return;
+
+  conversationWatcher = FirebaseFirestore.instance
+      .collection('conversations')
+      .doc(widget.conversationId!)
+      .snapshots()
+      .listen((snapshot) {
+    if (!snapshot.exists) {
+      _onMergeClosedRemotely();
+    }
+  });
+  }
+  
   Future<void> _handleMergeExpired() async {
     if (hasConversationId) {
       await pulseService.expireMerge(conversationId: widget.conversationId!);
