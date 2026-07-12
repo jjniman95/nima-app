@@ -50,7 +50,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
   _startMergeTimer();
   _startConversationWatcher();
 }
-  }
 
   Future<void> _requestAboutPulse() async {
   if (!hasConversationId || localUserId == null) return;
